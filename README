@@ -1,0 +1,27 @@
+Aurox è un programma per la gestione di una stalla di bovini, più precisamente delle operazioni di movimentazione (ingresso e uscita) dei capi, di gestione del registro di stalla e di invio dei dati all'organo competente per il carico nei databases nazionali.
+Maggiori dettagli sull'uso si possono trovare nella guida apposita.
+
+Per quanto riguarda il funzionamento del programma, sono necessarie queste gemme:
+- gtk2
+- rubygems
+- active_record
+- pdf/writer
+- pdf/simpletable
+- ftools
+
+Nel caso si stia lavorando sotto windows, bisogna caricare anche "win32ole".
+
+Serve anche un programma che legga i files .pdf .
+
+Come si può intuire dalle gemme, è stato realizzato usando Gtk2 per la grafica e Mysql come database.
+
+Per farlo partire, basta lanciare il file "aurox-x.y.z.rb".
+
+ToDo
+
+- Grazie alla mia inesperienza illimitata, non ho ben capito come spezzare l'attuale monolito di codice in qualcosa di più gestibile e standard; prima o poi deve essere fatto;
+- Nelle combobox è molto più comoda una selezione via autocompletamento del testo;
+- I nomi delle tabelle e dei loro campi sono da sistemare, come alcune variabili del programma;
+- Sotto GNU/Linux come programma per l'apertura dei pdf usa Evince; dovrebbe invece essere indipendentemente da ciò;
+- ... altro...
+
