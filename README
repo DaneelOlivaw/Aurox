@@ -17,7 +17,17 @@ Come si può intuire dalle gemme, è stato realizzato usando Gtk2 per la grafica
 
 Per farlo partire, basta lanciare il file "aurox-x.y.z.rb".
 
-Le directory presenti sono quelle in cui il programma salva i files che genera, mentre il database si può creare con l'apposito file .sql. Quest'ultimo è presente in due versioni: senza dati e con una stalla di esempio con alcuni capi.
+Sono necessarie alcune directory in cui saranno salvati i files generati:
+- altro : presenti in stalla e allegato modello4;
+- file : tutti i files creati da inviarsi all'organo di competenza;
+- invio : qui ci sarà sempre solo l'ultimo file da inviare generato, in modo che l'utente non impazziosca per trovarlo; ogni volta che se ne gerera uno, quello contenuto è cancellato;
+- registro : ultime pagine del registro vidimato;
+- regnv : ultime pagine del registro non vidimato;
+- vidim : fogli da vidimare.
+
+Logicamente tutti i pdf ogni volta sono sovrascritti dai precedenti.
+
+Il database si può creare con l'apposito file .sql. Quest'ultimo è presente in due versioni: senza dati e con una stalla di esempio con alcuni capi.
 
 
 ToDo
