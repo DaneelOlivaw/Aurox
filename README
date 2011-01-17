@@ -27,7 +27,7 @@ Sono necessarie alcune directory in cui saranno salvati i files generati:
 - regnv : ultime pagine del registro non vidimato;
 - vidim : fogli da vidimare.
 
-Logicamente tutti i pdf ogni volta sono sovrascritti dai precedenti.
+Logicamente tutti i pdf ogni volta sono sovrascritti dai seguenti.
 
 Il database si può creare con l'apposito file .sql. Quest'ultimo è presente in due versioni: senza dati e con una stalla di esempio con alcuni capi.
 
