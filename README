@@ -19,7 +19,9 @@ Per farlo partire, basta lanciare il file "aurox-x.y.z.rb".
 
 Sono necessarie alcune directory in cui saranno salvati i files generati:
 - altro : presenti in stalla e allegato modello4;
+- esportadb : conterrà le esportazioni del database;
 - file : tutti i files creati da inviarsi all'organo di competenza;
+- importadb : directory aperta di default dal tool di importazione del database;
 - invio : qui ci sarà sempre solo l'ultimo file da inviare generato, in modo che l'utente non impazziosca per trovarlo; ogni volta che se ne gerera uno, quello contenuto è cancellato;
 - registro : ultime pagine del registro vidimato;
 - regnv : ultime pagine del registro non vidimato;
