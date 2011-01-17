@@ -1,3 +1,4 @@
+#ActiveRecord::Base.logger = Logger.new(STDOUT) #Butta in console il codice sql delle varie operazioni e query
 ActiveRecord::Base.establish_connection(
         :adapter => "mysql",
         :host => "localhost",

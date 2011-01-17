@@ -32,8 +32,6 @@ Il database si può creare con l'apposito file .sql. Quest'ultimo è presente in
 
 ToDo
 
-- Grazie alla mia inesperienza illimitata, non ho ben capito come spezzare l'attuale monolito di codice in qualcosa di più gestibile e standard; prima o poi deve essere fatto;
-- Nelle combobox è molto più comoda una selezione via autocompletamento del testo;
 - I nomi delle tabelle e dei loro campi sono da sistemare, come alcune variabili del programma;
 - Sotto GNU/Linux come programma per l'apertura dei pdf usa Evince; dovrebbe invece essere indipendentemente da ciò;
 - ... altro...
