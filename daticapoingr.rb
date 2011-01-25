@@ -29,7 +29,7 @@ def inscapo
 	boxingr1.pack_start(bottaltricod, true, false, 0)
 
 	bottaltricod.signal_connect("clicked") {
-		insaltricod
+		insaltricod(finestraingr)
 	}
 	errore = 0
 	labelingr = Gtk::Label.new("Totale capi da inserire: #{@containgressi}")

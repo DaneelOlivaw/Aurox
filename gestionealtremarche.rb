@@ -1,4 +1,4 @@
-def insaltricod
+def insaltricod(finestraingr)
 	minsaltricod = Gtk::Window.new("Codici a barre non standard")
 	minsaltricod.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxinsaltricodv = Gtk::VBox.new(false, 0)
@@ -27,7 +27,7 @@ def insaltricod
 			@marca.text = "#{altramarca}"
 			@nascita.text = "#{altranascita}"
 			minsaltricod.destroy
-			@finestraingr.present
+			finestraingr.present
 		end
 	}
 	bottins.signal_connect( "clicked" ) {
@@ -39,7 +39,7 @@ def insaltricod
 			minsaltricod.destroy
 			@marca.text = "#{altramarca}"
 			@nascita.text = "#{altranascita}"
-			@finestraingr.present
+			finestraingr.present
 		end
 	}
 	minsaltricod.show_all
