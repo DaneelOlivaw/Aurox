@@ -840,8 +840,13 @@ def inscapo
 
 	bottchiudi = Gtk::Button.new("Chiudi finestra")
 	bottchiudi.signal_connect("clicked") {
-		@primocapo = 0
-		finestraingr.destroy
+		avviso = Gtk::MessageDialog.new(finestraingr, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Esco dalla procedura di inserimento?")
+		risposta = avviso.run
+		avviso.destroy
+		if risposta == Gtk::Dialog::RESPONSE_YES
+			@primocapo = 0
+			finestraingr.destroy
+		end
 	}
 	boxingrvert.pack_start(bottchiudi, false, false, 0)
 	finestraingr.show_all
