@@ -36,7 +36,7 @@ def importadb(mimportadb, password2, selezione)
 	if password2.text == ""
 		Errore.avviso(mimportadb, "Password sbagliata")
 	else
-		nomecopia = Time.now.strftime('aurox_%H%M%d%m%y')
+		nomecopia = Time.now.strftime('aurox_%y%m%d%H%M')
 		if @sistema == "linux"
 #			puts Dir.pwd
 			`mysqldump -u root -p"#{password2.text}" aurox > #{@dir}/esportadb/#{nomecopia}`

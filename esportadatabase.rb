@@ -40,13 +40,13 @@ def esportadb(mesportadb, password)
 	else
 		#system("mysqldump -u root -p'#{password.text}' aurox > ./esportadb/aurox.sql 2> errore.txt")
 		#comando = `mysqldump -u root -p'#{password.text}' aurox > ./esportadb/aurox.sql 2>&1`
-#		if @sistema == "linux"
+		if @sistema == "linux"
 #			comando = `mysqldump -u root -p'#{password.text}' aurox > ./esportadb/#{Time.now.strftime('aurox_%H%M%d%m%y.sql')} 2>&1`
-			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}/esportadb/#{Time.now.strftime("aurox_%H%M%d%m%y.sql")} 2>&1`
-#		else
-#			comando = `mysqldump -u root -p"#{password.text}" aurox > .\\esportadb\\#{Time.now.strftime("aurox_%H%M%d%m%y.sql")} 2>&1`
+			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}/esportadb/#{Time.now.strftime("aurox_%y%m%d%H%M.sql")} 2>&1`
+		else
+			comando = `mysqldump -u root -p"#{password.text}" aurox > .\\esportadb\\#{Time.now.strftime("aurox_%y%m%d%H%M.sql")} 2>&1`
 #			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}\\esportadb\\#{Time.now.strftime("aurox_%H%M%d%m%y.sql")} 2>&1`
-#		end
+		end
 #		puts comando
 #		puts $?
 		if $? != 0

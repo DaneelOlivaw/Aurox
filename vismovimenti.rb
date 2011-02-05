@@ -134,17 +134,17 @@ def vismovimenti
 #	@relid = @combo3.active_iter[0]
 	visingressi.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "I"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "I"], :order => ["data_ingr"])
 		riempimento(selmov, lista, labelconto)
 	}
 	visuscite.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "U"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "U"], :order => ["uscita"])
 		riempimento(selmov, lista, labelconto)
 	}
 	vispresenti.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and uscito= ?", "#{@stallaoper.id}", "I", "0"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and uscito= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr"])
 		riempimento(selmov, lista, labelconto)
 	}
 	vistutti.signal_connect("clicked") {
