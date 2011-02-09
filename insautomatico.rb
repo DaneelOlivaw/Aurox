@@ -135,7 +135,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	end
 
 	allprov = Allevamentis.find(:first, :conditions => ["cod317 = ? and ragsoc = ?", "#{@stallaoper.stalle.cod317}", "#{@stallaoper.ragsoc.ragsoc}"])
-	puts allprov.id
+	#puts allprov.id
 	#Bottone di inserimento ingressi
 
 	bottinserisci = Gtk::Button.new( "Inserisci" )
@@ -146,8 +146,8 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 		else
 			dataingringl = @giorno.strftime("%Y")[0,2] + dataingr.text[4,2] + dataingr.text[2,2] + dataingr.text[0,2]
 			datamod4ingl = @giorno.strftime("%Y")[0,2] + datamod4ingr.text[4,2] + datamod4ingr.text[2,2] + datamod4ingr.text[0,2]
-			puts comboprop.active_iter[0]
-			puts datamod4ingl
+			#puts comboprop.active_iter[0]
+			#puts datamod4ingl
 			listasel.each do |model,path,iter|
 				marcauscid = iter[0]
 				marcausc = iter[2]
@@ -163,7 +163,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 				marcaprecedenteusc = iter[12]
 				madreusc = iter[13]
 				padreusc = iter[14]
-				puts marcausc
+				#puts marcausc
 				Animals.create(:relaz_id => "#{comboprop.active_iter[0]}", :tipo => "I", :cm_ing => "#{comboing.active_iter[0]}", :marca => "#{marcausc}", :specie=> "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :data_ingr => "#{dataingringl}", :allevamenti_id => "#{allprov.id}", :naz_prov => "#{nazprimimpusc}", :mod4 => "#{mod4}", :data_mod4 => "#{datamod4ingl}")
 			end
 			Conferma.conferma(minsaut, "Capi inseriti correttamente.")
