@@ -120,6 +120,7 @@ def modificacapo(selcapo)
 	#Modifica marca
 
 	capomod = selcapo.selected
+	#puts capomod[46]
 #	puts "#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}"
 	#puts @selcapo[18]
 	#capomodreg = Registros.find(:first, :conditions => "relaz_id='#{@stallaoper}' and marca='#{capomod[3]}' and dataingresso='#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}'")
@@ -543,9 +544,12 @@ def modificacapo(selcapo)
 	comboallprov.set_attributes(renderer1, :text => 3)
 	boxmodc44.pack_start(comboallprov.popdown, false, false, 5)
 	if capomod[19] != ""
+#	if capomod[46] != ""
 		comboallprov.set_active(0)
+#		puts comboallprov.active_iter[0]
 		contaallprov = -1
-		while comboallprov.active_iter[3] != capomod[19]
+#		while comboallprov.active_iter[3] != capomod[19]
+		while comboallprov.active_iter[0] != capomod[46].to_i
 			contaallprov+=1
 			comboallprov.set_active(contaallprov)
 		end

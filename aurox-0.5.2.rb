@@ -1,6 +1,7 @@
 #Quinta beta: nomi a posto, diminuzione variabili, gestione del cambio anno
 
 require 'dipendenze'
+#require 'compregzardo'
 #prova = Relazs.scoped({})
 #puts "prova1 " + "#{prova.class}"
 #puts prova.size
@@ -136,7 +137,8 @@ Gtk.init
 	combo2.signal_connect( "changed" ) {
 		if combo2.active != -1 then
 			#@idragsoc = combo2.active
-			sel3 = Relazs.find(:all, :from => "props, relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			sel3 = Relazs.find(:all, :from => "relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			#sel3 = Relazs.find(:all, :from => "props, relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
 			listacombo3.clear
 			sel3.each do |s|
 				iter = listacombo3.append
@@ -238,6 +240,7 @@ Gtk.init
 		if combo.active == -1 or combo2.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale ed un proprietario.")
 		else
+#=begin
 			registrare = Animals.find(:all, :conditions => ["relaz_id= ? and registro= ?", "#{@stallaoper.id}", "0"]).length
 			if registrare == 0
 				Conferma.conferma(window, "Nessun capo da spostare nel registro.")
@@ -249,6 +252,8 @@ Gtk.init
 					compilaregistro(window)
 				end
 			end
+#=end
+#			compregzardo
 		end
 	}
 	box1.pack_start(ingressi, false, false, 0)

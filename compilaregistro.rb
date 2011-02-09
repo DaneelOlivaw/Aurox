@@ -6,7 +6,8 @@ def compilaregistro(finestra)
 	#anno = "#{@giorno.strftime("%y")[0,2]} + #{nprog[1]}".to_i
 	anno = Time.parse("#{nprog[1]}").strftime("%Y")[0,2] + nprog[1]
 	#puts anno
-	if anno < @giorno.strftime("%Y") and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"]).length != 0 or compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"]).length != 0
+	#puts @giorno.strftime("%Y")
+	if anno.to_i < @giorno.strftime("%Y").to_i # and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"]).length != 0 or compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"]).length != 0
 		#puts "prima condizione"
 		avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Attenzione: ci sono ancora movimenti dell\'anno #{anno}. Si ricorda che prima di passare alla gestione dei dati del #{@giorno.strftime("%Y")} non dovranno esserci movimenti di ingresso dell'anno precedente. Proseguo?")
 		risposta = avviso.run

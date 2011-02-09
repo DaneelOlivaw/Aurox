@@ -218,10 +218,21 @@ def datiuscita(finestra, muscite, listasel, combousc)
 		if comboalldest.active == -1 or comboalldest.sensitive? == false
 			valcomboalldest = ""
 		else
+			mod4 = "#{@stallaoper.stalle.cod317}/#{Time.parse("#{datamod4uscingl}").strftime("%Y")}/#{mod4usc.text}"
+			#puts mod4
 			idalldest = comboalldest.active_iter[0]
 			valcomboalldest = comboalldest.active_iter[1]
 			alldestidfisc = comboalldest.active_iter[2]
 			alldest317 = comboalldest.active_iter[3]
+			#provaunione = Relazs.joins(:stalle, :ragsoc)
+#			alldir = Relazs.find(:first, :from => "relazs, stalles, ragsocs", :conditions => ["stalles.cod317 = ? and ragsocs.ragsoc = ?", "#{alldest317}", "#{valcomboalldest}"])
+			#alldir = Relazs.find(:all, :from => "relazs, stalles, ragsocs", :conditions => ["stalles.cod317= ?  and ragsocs.ragsoc= ?", "#{alldest317}", "#{valcomboalldest}"])
+			alldir = Relazs.find(:all, :include => [:stalle, :ragsoc], :conditions => ["stalles.cod317= ? and ragsocs.ragsoc= ?", "#{alldest317}", "#{valcomboalldest}"])
+			#puts "alldir = #{alldir.id}"
+#			alldir.each do|a|
+#			puts a.ragsoc.ragsoc
+#			puts a.stalle.cod317
+#			end
 		end
 		if combonazdest.active == -1 or combonazdest.sensitive? == false
 			valcombonazdest = ""
@@ -248,16 +259,28 @@ def datiuscita(finestra, muscite, listasel, combousc)
 			marcaprecedenteusc = iter[12]
 			madreusc = iter[13]
 			padreusc = iter[14]
-			Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "U", :cm_usc => "#{combousc.active_iter[0]}", :marca => "#{marcausc}", :specie => "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :uscita => "#{datauscingl}", :allevamenti_id => "#{idalldest}", :naz_dest => "#{valcombonazdest}", :trasp => "#{valcombotrasp}", :mod4 => "#{@stallaoper.stalle.cod317}/#{Time.parse("#{datamod4uscingl}").strftime("%Y")}/#{mod4usc.text}", :data_mod4 => "#{datamod4uscingl.to_i}", :marcasost => "#{marcasost.text}", :idcoll => "#{marcauscid}")
+			Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "U", :cm_usc => "#{combousc.active_iter[0]}", :marca => "#{marcausc}", :specie => "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :uscita => "#{datauscingl}", :allevamenti_id => "#{idalldest}", :naz_dest => "#{valcombonazdest}", :trasp => "#{valcombotrasp}", :mod4 => "#{mod4}", :data_mod4 => "#{datamod4uscingl.to_i}", :marcasost => "#{marcasost.text}", :idcoll => "#{marcauscid}")
 			usc = Animals.find(:first, :conditions => ["idcoll = ?", "#{marcauscid}"])
 			Animals.update(marcauscid, { :uscito => "1", :idcoll => "#{usc.id}"})
 		end
 		Contatoris.update(@stallaoper.contatori.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
 		@stallaoper.contatori.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
 		Conferma.conferma(mdatiuscita, "Capi usciti correttamente.")
+		if alldir != nil
+			#puts "Trasf. diretto"
+			avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "L'allevamento di destinazione è tra le stalle gestite; procedo con il caricamento automatico?")
+			risposta = avviso.run
+			avviso.destroy
+			if risposta == Gtk::Dialog::RESPONSE_YES
+				#puts "Sì"
+				insautomatico(finestra, listasel, valcomboalldest, alldest317, alldir, combousc.active_iter[0], datausc.text, mod4, datamod4usc.text)
+			else
+				Conferma.conferma(finestra, "Operazione annullata.")
+			end
+		end
 		mdatiuscita.destroy
 		muscite.destroy
-		finestra.present
+		#finestra.present
 		else
 	end
 	}

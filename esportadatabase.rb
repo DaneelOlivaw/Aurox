@@ -42,9 +42,9 @@ def esportadb(mesportadb, password)
 		#comando = `mysqldump -u root -p'#{password.text}' aurox > ./esportadb/aurox.sql 2>&1`
 		if @sistema == "linux"
 #			comando = `mysqldump -u root -p'#{password.text}' aurox > ./esportadb/#{Time.now.strftime('aurox_%H%M%d%m%y.sql')} 2>&1`
-			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}/esportadb/#{Time.now.strftime("aurox_%y%m%d%H%M.sql")} 2>&1`
+			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}/esportadb/#{Time.now.strftime("aurox_%Y%m%d%H%M.sql")} 2>&1`
 		else
-			comando = `mysqldump -u root -p"#{password.text}" aurox > .\\esportadb\\#{Time.now.strftime("aurox_%y%m%d%H%M.sql")} 2>&1`
+			comando = `mysqldump -u root -p"#{password.text}" aurox > .\\esportadb\\#{Time.now.strftime("aurox_%Y%m%d%H%M.sql")} 2>&1`
 #			comando = `mysqldump -u root -p"#{password.text}" aurox > #{@dir}\\esportadb\\#{Time.now.strftime("aurox_%H%M%d%m%y.sql")} 2>&1`
 		end
 #		puts comando

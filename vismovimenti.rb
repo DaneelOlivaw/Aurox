@@ -49,20 +49,24 @@ def vismovimenti
 					itermov[19] = m.allevamenti.cod317
 					itermov[20] = m.allevamenti.ragsoc
 					itermov[21] = m.allevamenti.idfisc
+					itermov[46] = m.allevamenti_id.to_s
 				else
 					itermov[19] = ""
 					itermov[20] = ""
 					itermov[21] = ""
+#					itermov[46] = ""
 				end
 			elsif m.tipo == "U"
 				if m.allevamenti_id != nil
 					itermov[30] = m.allevamenti.cod317
 					itermov[32] = m.allevamenti.ragsoc
 					itermov[33] = m.allevamenti.idfisc
+					itermov[47] = m.allevamenti_id.to_s
 				else
 					itermov[30] = ""
 					itermov[32] = ""
 					itermov[33] = ""
+#					itermov[47] = ""
 				end
 			end
 			itermov[22] = m.naz_prov

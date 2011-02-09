@@ -18,6 +18,7 @@ def compilazione(finestra, compingr, compusc, progr, anno)
 			compingr.each do |iter|
 				arrayreg[0] = iter.id
 				arrayreg[1] = iter.marca
+				#puts iter.id
 				arrayreg[2] = iter.razza.cod_razza
 				arrayreg[3] = iter.sesso
 				arrayreg[4] = iter.marca_madre
