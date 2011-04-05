@@ -88,7 +88,7 @@ def compilazione(finestra, compingr, compusc, progr, anno)
 				end
 				arrayusc[5] = iterusc.mod4
 				arrayusc[6] = iterusc.certsanusc
-				Registros.update_all({:tipouscita => "#{arrayusc[2]}", :datauscita => "#{arrayusc[3]}", :destinazione => "#{arrayusc[4]}", :mod4usc => "#{arrayusc[5]}", :certsanusc => "#{arrayusc[6]}"}, "marca = '#{arrayusc[1]}'")
+				Registros.update_all({:tipouscita => "#{arrayusc[2]}", :datauscita => "#{arrayusc[3]}", :destinazione => "#{arrayusc[4]}", :mod4usc => "#{arrayusc[5]}", :certsanusc => "#{arrayusc[6]}"}, "marca = '#{arrayusc[1]}' and relaz_id = '#{@stallaoper.id}'")
 				Animals.update(arrayusc[0], {:registro => "1"})
 			end
 		end

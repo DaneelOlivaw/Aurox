@@ -176,7 +176,7 @@ def datimacellazione(finestra, muscite, listasel, combousc)
 	bottmovusc.signal_connect("clicked") {
 		begin
 			errore = nil
-			if datausc.text == "" or combomacdest.active_iter == -1 or combotrasp.active_iter == -1 or mod4usc.text == "" or datamod4usc.text == ""
+			if datausc.text == "" or combomacdest.active == -1 or combotrasp.active == -1 or mod4usc.text == "" or datamod4usc.text == ""
 				Errore.avviso(mdatimacellazione, "Mancano dati.")
 				errore = 1
 			elsif datausc.text.to_i == 0 or datamod4usc.text.to_i == 0

@@ -228,7 +228,8 @@ def datiuscita(finestra, muscite, listasel, combousc)
 #			alldir = Relazs.find(:first, :from => "relazs, stalles, ragsocs", :conditions => ["stalles.cod317 = ? and ragsocs.ragsoc = ?", "#{alldest317}", "#{valcomboalldest}"])
 			#alldir = Relazs.find(:all, :from => "relazs, stalles, ragsocs", :conditions => ["stalles.cod317= ?  and ragsocs.ragsoc= ?", "#{alldest317}", "#{valcomboalldest}"])
 			alldir = Relazs.find(:all, :include => [:stalle, :ragsoc], :conditions => ["stalles.cod317= ? and ragsocs.ragsoc= ?", "#{alldest317}", "#{valcomboalldest}"])
-			#puts "alldir = #{alldir.id}"
+#			puts alldir.length
+#			puts "alldir = #{alldir.id}"
 #			alldir.each do|a|
 #			puts a.ragsoc.ragsoc
 #			puts a.stalle.cod317
@@ -266,7 +267,7 @@ def datiuscita(finestra, muscite, listasel, combousc)
 		Contatoris.update(@stallaoper.contatori.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
 		@stallaoper.contatori.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
 		Conferma.conferma(mdatiuscita, "Capi usciti correttamente.")
-		if alldir != nil
+		if alldir.length > 0
 			#puts "Trasf. diretto"
 			avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "L'allevamento di destinazione è tra le stalle gestite; procedo con il caricamento automatico?")
 			risposta = avviso.run

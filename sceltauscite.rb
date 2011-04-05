@@ -127,6 +127,7 @@ def mascuscite(finestra)
 		@contatore = 0
 
 		caposel = selezione.selected
+		#puts caposel
 		if caposel == nil
 			Errore.avviso(muscite, "Nessun capo selezionato.")
 		else
