@@ -38,10 +38,10 @@ def mascregnonvidim
 
 	stampaingrnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"]) == 0
+		if Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
-			conto = Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"])
+			#conto = Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"])
 			#puts conto.class
 			#puts conto
 			registroingrnv(comboanno)
@@ -49,7 +49,7 @@ def mascregnonvidim
 	}
 	stampauscnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:all, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["datauscita, id"]).length == 0
+		if Registros.find(:first, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["datauscita, id"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
 			registrouscnv(comboanno)
@@ -57,7 +57,7 @@ def mascregnonvidim
 	}
 	stamparegnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:all, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"]).length == 0
+		if Registros.find(:first, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
 			registronv(comboanno)
