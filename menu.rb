@@ -105,6 +105,7 @@ def createMenuBar(finestra, listacombo, combo, combo2, combo3)
 			Errore.avviso(finestra, "Seleziona una stalla, una ragione sociale ed un proprietario.")
 		else
 			stampapres(finestra)
+			#stampapresmov(finestra)
 		end
 	}
 	menustampe.append(itemstampe)

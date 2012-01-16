@@ -24,6 +24,7 @@ def mascuscite(finestra)
 	muscite.add(boxuscv)
 	#relid = @stallaoper.id
 	@uscenti = 0
+	@contatore = 0
 	labelselezione.set_markup("<b>Capi presenti</b>")
 	labelselezionati.set_markup("<b>Capi da far uscire: #{@uscenti}</b>")
 	lista = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String, String, String)
@@ -88,7 +89,7 @@ def mascuscite(finestra)
 	}
 	listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
 	vista.signal_connect("row-activated") do |view, path, column|
-		trasferisci(selezione, listasel, lista, labelselezionati)
+		trasferisci(muscite, selezione, listasel, lista, labelselezionati)
 	end
 	def elenca(lista, cerca)
 		lista.clear
@@ -123,13 +124,13 @@ def mascuscite(finestra)
 		end
 	end
 	#listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
-	def trasferisci(selezione, listasel, lista, labelselezionati)
-		@contatore = 0
+	def trasferisci(finestra, selezione, listasel, lista, labelselezionati)
+		#@contatore = 0
 
 		caposel = selezione.selected
 		#puts caposel
 		if caposel == nil
-			Errore.avviso(muscite, "Nessun capo selezionato.")
+			Errore.avviso(finestra, "Nessun capo selezionato.")
 		else
 			path = caposel.path
 			if listasel.iter_first == nil
@@ -191,7 +192,7 @@ def mascuscite(finestra)
 	spostasel = Gtk::Button.new( ">>" )
 	#listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
 	spostasel.signal_connect( "clicked" ) {
-		trasferisci(selezione, listasel, lista, labelselezionati)
+		trasferisci(muscite, selezione, listasel, lista, labelselezionati)
 	}
 
 	vista2 = Gtk::TreeView.new(listasel)
@@ -207,6 +208,8 @@ def mascuscite(finestra)
 
 	spostasel2 = Gtk::Button.new( "<<" )
 	spostasel2.signal_connect( "clicked" ) {
+		#puts @contatore
+		#puts @uscenti
 		caposel2 = selezione2.selected
 		if caposel2 == nil
 			Errore.avviso(muscite, "Nessun capo selezionato.")
@@ -231,6 +234,8 @@ def mascuscite(finestra)
 			listasel.remove(listasel.get_iter(path2))
 			@contatore-=1
 			@uscenti -=1
+			#puts @contatore
+			#puts @uscenti
 			labelselezionati.set_markup("<b>Capi da far uscire: #{@uscenti}</b>")
 		end
 	}
@@ -258,21 +263,22 @@ def mascuscite(finestra)
 	boxusc2.pack_start(combousc, false, false, 5)
 	bottdatiusc = Gtk::Button.new( "Inserisci movimento di uscita" )
 	bottdatiusc.signal_connect( "clicked" ) {
-	if @contatore == 0 or nil
-			Errore.avviso(muscite, "Nessun capo selezionato.")
-	else
-		if combousc.active == -1
-			Errore.avviso(muscite, "Seleziona un movimento di uscita.")
-		elsif combousc.active_iter[0] == 4
-			datimorte(finestra, muscite, listasel, combousc)
-		elsif combousc.active_iter[0] == 9
-			datimacellazione(finestra, muscite, listasel, combousc)
-		elsif combousc.active_iter[0] == 6
-			datifurto(finestra, muscite, listasel, combousc)
+		#puts @contatore
+		if @contatore == 0 or nil
+				Errore.avviso(muscite, "Nessun capo selezionato.")
 		else
-			datiuscita(finestra, muscite, listasel, combousc)
+			if combousc.active == -1
+				Errore.avviso(muscite, "Seleziona un movimento di uscita.")
+			elsif combousc.active_iter[0] == 4
+				datimorte(finestra, muscite, listasel, combousc)
+			elsif combousc.active_iter[0] == 9
+				datimacellazione(finestra, muscite, listasel, combousc)
+			elsif combousc.active_iter[0] == 6
+				datifurto(finestra, muscite, listasel, combousc)
+			else
+				datiuscita(finestra, muscite, listasel, combousc)
+			end
 		end
-	end
 	}
 	muscitescroll1.add(vista)
 	muscitescroll2.add(vista2)

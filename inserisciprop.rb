@@ -50,7 +50,7 @@ def creaprop(finestra)
 			Errore.avviso(mcreaprop, "Mancano dei dati.")
 		else
 			if tipoifallev == "F"
-				controllo = Props.find(:first, :conditions => "prop = '#{codprop.text.upcase}' and codfisc = '#{idfisc.text.upcase}' and idf = '#{tipoifallev}'")
+				controllo = Props.find(:first, :conditions => ["prop = ? and codfisc = ? and idf = ?", codprop.text.upcase, idfisc.text.upcase, tipoifallev])
 				if controllo == nil
 					Props.create(:prop => "#{codprop.text.upcase}", :codfisc => "#{idfisc.text.upcase}", :idf => "#{tipoifallev}")
 					Conferma.conferma(mcreaprop, "Dati inseriti correttamente")
@@ -59,7 +59,7 @@ def creaprop(finestra)
 					Errore.avviso(mcreaprop, "Il proprietario è già presente.")
 				end
 			else
-				controllo = Props.find(:first, :conditions => "prop = '#{codprop.text.upcase}' and piva = '#{idfisc.text.upcase}' and idf = '#{tipoifallev}'")
+				controllo = Props.find(:first, :conditions => ["prop = ? and piva = ? and idf = ?", codprop.text.upcase, idfisc.text.upcase, tipoifallev])
 				if controllo == nil
 					Props.create(:prop => "#{codprop.text.upcase}", :piva => "#{idfisc.text.upcase}", :idf => "#{tipoifallev}")
 					Conferma.conferma(mcreaprop, "Dati inseriti correttamente")

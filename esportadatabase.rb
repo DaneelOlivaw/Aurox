@@ -51,7 +51,7 @@ def esportadb(mesportadb, password)
 #		puts $?
 		if $? != 0
 #			puts "sbagliato"
-			Errore.avviso(mesportadb, "Password sbagliata")
+			Errore.avviso(mesportadb, "Errore nell'esportazione")
 			password.text = ""
 		else
 			Conferma.conferma(mesportadb, "Database esportato correttamente")

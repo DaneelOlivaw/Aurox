@@ -131,10 +131,11 @@ def modmacelli
 	labelmacello = Gtk::Label.new("Selezona macello:")
 	boxmodmac1.pack_start(labelmacello, false, false, 5)
 
-	def generalista(listamac)
+	def generalista(listamacdest)
+		listamacdest.clear
 		selmac = Macellis.find(:all, :order => "nomemac")
 		selmac.each do |m|
-			iter1 = listamac.append
+			iter1 = listamacdest.append
 			iter1[0] = m.id.to_i
 			iter1[1] = m.nomemac
 			iter1[2] = m.ifmac
@@ -143,9 +144,9 @@ def modmacelli
 		end
 	end
 
-	listamac = Gtk::ListStore.new(Integer, String, String, String, Integer)
-	generalista(listamac)
-	combomac = Gtk::ComboBox.new(listamac)
+	listamacdest = Gtk::ListStore.new(Integer, String, String, String, Integer)
+	generalista(listamacdest)
+	combomac = Gtk::ComboBox.new(listamacdest)
 	renderer1 = Gtk::CellRendererText.new
 	combomac.pack_start(renderer1,false)
 	combomac.set_attributes(renderer1, :text => 1)
@@ -203,14 +204,16 @@ def modmacelli
 
 	boxmodmac5.pack_start(comboregmac, false, false, 5)
 	combomac.signal_connect( "changed" ) {
-		nomemac.text=("#{combomac.active_iter[1]}")
-		idfiscmac.text=("#{combomac.active_iter[2]}")
-		bollomac.text=("#{combomac.active_iter[3]}")
-		comboregmac.set_active(0)
-		contareg = -1
-		while comboregmac.active_iter[0] != combomac.active_iter[4]
-			contareg+=1
-			comboregmac.set_active(contareg)
+		if combomac.active != -1
+			nomemac.text=("#{combomac.active_iter[1]}")
+			idfiscmac.text=("#{combomac.active_iter[2]}")
+			bollomac.text=("#{combomac.active_iter[3]}")
+			comboregmac.set_active(0)
+			contareg = -1
+			while comboregmac.active_iter[0] != combomac.active_iter[4]
+				contareg+=1
+				comboregmac.set_active(contareg)
+			end
 		end
 	}
 
@@ -226,8 +229,8 @@ def modmacelli
 			idfiscmac.text=("")
 			bollomac.text=("")
 			comboregmac.active = -1
-			generalista
-			combomac.model=(listamac)
+			generalista(listamacdest)
+			combomac.model=(listamacdest)
 		end
 	}
 

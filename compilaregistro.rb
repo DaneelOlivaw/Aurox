@@ -7,7 +7,7 @@ def compilaregistro(finestra)
 	anno = Time.parse("#{nprog[1]}").strftime("%Y")[0,2] + nprog[1]
 	#puts anno
 	#puts @giorno.strftime("%Y")
-	if anno.to_i < @giorno.strftime("%Y").to_i # and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"]).length != 0 or compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"]).length != 0
+	if anno.to_i < @giorno.strftime("%Y").to_i and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"]).length != 0 or Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"]).length != 0
 		#puts "prima condizione"
 		avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Attenzione: ci sono ancora movimenti dell\'anno #{anno}. Si ricorda che prima di passare alla gestione dei dati del #{@giorno.strftime("%Y")} non dovranno esserci movimenti di ingresso dell'anno precedente. Proseguo?")
 		risposta = avviso.run
@@ -15,16 +15,18 @@ def compilaregistro(finestra)
 		if risposta == Gtk::Dialog::RESPONSE_YES
 			compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"])
 			compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"])
+			#puts compingr.length
+			#puts compusc.length
 			compilazione(finestra, compingr, compusc, nprog[0].to_i, nprog[1].to_i)
 		else
 			Conferma.conferma(finestra, "Operazione annullata.")
 		end
-	elsif anno < @giorno.strftime("%Y") and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{@giorno.strftime("%Y")}"]).length != 0 or compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{@giorno.strftime("%Y")}"]).length != 0
+	elsif anno.to_i < @giorno.strftime("%Y").to_i and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{@giorno.strftime("%Y")}"]).length != 0 or Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{@giorno.strftime("%Y")}"]).length != 0
 		#puts "seconda condizione"
 		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])
 		compilazione(finestra, compingr, compusc, 0, @giorno.strftime("%y"))
-	elsif anno == @giorno.strftime("%Y")
+	elsif anno.to_i == @giorno.strftime("%Y").to_i
 		#puts "terza condizione"
 		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])

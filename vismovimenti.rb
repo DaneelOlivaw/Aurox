@@ -16,6 +16,7 @@ def vismovimenti
 
 	def riempimento(selmov, lista, labelconto)
 		selmov.each do |m|
+			#puts m.marca
 			itermov = lista.append
 			itermov[0] = m.id.to_i
 			itermov[1] = m.tipo

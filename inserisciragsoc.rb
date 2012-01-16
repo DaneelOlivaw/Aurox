@@ -50,7 +50,7 @@ def crearagsoc(finestra)
 			Errore.avviso(mcrearagsoc, "Mancano dei dati.")
 		else
 			if tipoidfisc == "F"
-				controllo = Ragsocs.find(:first, :conditions => "ragsoc = '#{codragsoc.text.upcase}' and codfisc = '#{idfisc.text.upcase}' and idf ='#{tipoidfisc}'")
+				controllo = Ragsocs.find(:first, :conditions => ["ragsoc = ? and codfisc = ? and idf = ?", codragsoc.text.upcase, idfisc.text.upcase, tipoidfisc])
 				if controllo == nil
 					Ragsocs.create(:ragsoc => "#{codragsoc.text.upcase}", :codfisc => "#{idfisc.text.upcase}", :idf => "#{tipoidfisc}")
 					Conferma.conferma(mcrearagsoc, "Dati inseriti correttamente")
@@ -59,7 +59,7 @@ def crearagsoc(finestra)
 					Errore.avviso(mcrearagsoc, "La ragione sociale è già presente.")
 				end
 			else
-				controllo = Ragsocs.find(:first, :conditions => "ragsoc = '#{codragsoc.text.upcase}' and piva = '#{idfisc.text.upcase}' and idf ='#{tipoidfisc}'")
+				controllo = Ragsocs.find(:first, :conditions => ["ragsoc = ? and piva = ? and idf = ?", codragsoc.text.upcase, idfisc.text.upcase, tipoidfisc])
 				if controllo == nil
 					Ragsocs.create(:ragsoc => "#{codragsoc.text.upcase}", :piva => "#{idfisc.text.upcase}", :idf => "#{tipoidfisc}")
 					Conferma.conferma(mcrearagsoc, "Dati inseriti correttamente")

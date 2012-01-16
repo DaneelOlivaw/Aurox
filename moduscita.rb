@@ -495,7 +495,7 @@ def modificacapousc(selcapo)
 	if capomod[30] != ""
 		comboalldest.set_active(0)
 		contaalldest = -1
-		while comboalldest.active_iter[3] != capomod[30]
+		while comboalldest.active_iter[0] != capomod[47].to_i
 			contaalldest+=1
 			comboalldest.set_active(contaalldest)
 		end

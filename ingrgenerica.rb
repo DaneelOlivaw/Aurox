@@ -202,8 +202,8 @@ def mascingressi(finestraingr, labelingr)
 				@datamod4ingl = @datamod4.text[4,2] + @datamod4.text[2,2] + @datamod4.text[0,2]
 				@datamod4ingl = Time.parse("#{@datamod4ingl}").strftime("%Y")[0,2] + @datamod4ingl
 				#puts Time.parse("#{@datamod4ingl}").strftime("%Y")
-					if Time.parse("#{@datamod4ingl}") < Time.parse("#{@dataingingl}")
-						Errore.avviso(mingressi, "La data del mod.4 non può essere inferiore alla data di ingresso.")
+					if Time.parse("#{@datamod4ingl}") > Time.parse("#{@dataingingl}")
+						Errore.avviso(mingressi, "La data del mod.4 non può essere successiva alla data di ingresso.")
 						errore = 1
 					else
 					end
