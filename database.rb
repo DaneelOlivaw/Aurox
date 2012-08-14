@@ -1,4 +1,4 @@
-# ActiveRecord::Base.logger = Logger.new(STDOUT) #Butta in console il codice sql delle varie operazioni e query
+#ActiveRecord::Base.logger = Logger.new(STDOUT) #Butta in console il codice sql delle varie operazioni e query
 ActiveRecord::Base.establish_connection(
         :adapter => "mysql",
         :host => "localhost",
@@ -12,6 +12,7 @@ class Relazs < ActiveRecord::Base
         belongs_to :user, :class_name => "Users"
         belongs_to :stalle, :class_name => "Stalles"
         belongs_to :ragsoc, :class_name => "Ragsocs"
+        belongs_to :detentori, :class_name => "Detentoris"
         belongs_to :prop, :class_name => "Props"
         belongs_to :contatori, :class_name => "Contatoris"
 end
@@ -21,6 +22,10 @@ class Stalles < ActiveRecord::Base
 end
 
 class Ragsocs < ActiveRecord::Base
+        has_many :relaz
+end
+
+class Detentoris < ActiveRecord::Base
         has_many :relaz
 end
 

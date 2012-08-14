@@ -2,7 +2,7 @@
 
 def compilaregistro(finestra)
 	#contid = @stallaoper.contatori.id
-	nprog = @stallaoper.contatori.progreg.split('/')
+	nprog = @stallaoper.progreg.split('/')
 	#anno = "#{@giorno.strftime("%y")[0,2]} + #{nprog[1]}".to_i
 	anno = Time.parse("#{nprog[1]}").strftime("%Y")[0,2] + nprog[1]
 	#puts anno

@@ -81,10 +81,10 @@ def modragsoc
 	#Identificativo fiscale
 
 	labelidfisc = Gtk::Label.new("Identificativo fiscale:")
-	boxmodragsoc3.pack_start(labelidfisc, false, false, 5)
+	boxmodragsoc4.pack_start(labelidfisc, false, false, 5)
 	@idfisc = Gtk::Entry.new()
 #	@idfisc.max_length=(16)
-	boxmodragsoc3.pack_start(@idfisc, false, false, 5)
+	boxmodragsoc4.pack_start(@idfisc, false, false, 5)
 
 	@comboragsoc.signal_connect( "changed" ) {
 		@nomeragsoc.text=("#{@comboragsoc.active_iter[1]}")

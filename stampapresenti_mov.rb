@@ -1,54 +1,19 @@
-def stampapres(finestra)
-	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and tipouscita IS NULL", "#{@stallaoper.id}"], :order => ["dataingresso, id"])
-	#selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and YEAR (dataingresso) > 2009 and YEAR(dataingresso)<= 2010 and tipouscita IS NULL", "#{@stallaoper.id}"], :order => ["dataingresso, id"])
+def stampapresmov(finestra)
+	selcapi = Animals.find(:all, :conditions => ["relaz_id= ? and tipo = ? and uscito = ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr"])
 	foglio = PDF::Writer.new(:paper => "A4")
-	foglio.margins_mm(5, 8, 12, 13)
 	foglio.select_font("Helvetica")
 	foglio.open_object do |testa|
 		foglio.save_state
-		dimcar = 8
+		dimcar = 9
 		x = foglio.margin_x_middle
 		y = foglio.absolute_top_margin
 		z = foglio.absolute_left_margin
 		w = foglio.absolute_right_margin
-		#puts foglio.absolute_top_margin
-		#testo = "CAPI PRESENTI NELLA STALLA  #{@stallaoper.stalle.cod317}  DI  #{@stallaoper.ragsoc.ragsoc}  IN DATA #{@giorno.strftime("%d/%m/%Y")}:  #{selcapi.length}"
-		testo = "CAPI PRESENTI NELLA STALLA  #{@stallaoper.stalle.cod317}  IN DATA  #{@giorno.strftime("%d/%m/%Y")}:  #{selcapi.length}"
+		testo = "<b>Capi presenti nella stalla #{@stallaoper.stalle.cod317} di #{@stallaoper.ragsoc.ragsoc} in data #{@giorno.strftime("%d/%m/%Y")}: #{selcapi.length}</b>"
 		boh = foglio.text_width(testo, dimcar) / 2.0
 		q = foglio.absolute_top_margin - (dimcar * 1.5)
 		m = x - boh
-		foglio.add_text(z, y, testo, dimcar)
-
-#		testodet = "DETENTORE:  #{@stallaoper.detentori.detentore}"
-#		#bohdet = foglio.text_width(testo, dimcar) / 2.0
-#		qdet = foglio.absolute_top_margin - (dimcar * 1.5)
-#		#mdet = x - bohdet
-#		foglio.add_text(z, qdet, testodet, dimcar)
-
-		testoragsoc = "RAGIONE SOCIALE:  #{@stallaoper.ragsoc.ragsoc}"
-#		bohragsoc = foglio.text_width(testo, dimcar) / 2.0
-		qragsoc = foglio.absolute_top_margin - (dimcar * 1.5)
-#		mragsoc = x - boh2
-		foglio.add_text(z, qragsoc, testoragsoc, dimcar)
-
-		if @stallaoper.detentori.detentore.length > 40
-			detentore = @stallaoper.detentori.detentore[0..40] + "..."
-		else
-			detentore = @stallaoper.detentori.detentore
-		end
-		if @stallaoper.prop.prop.length > 40
-			proprietario = @stallaoper.prop.prop[0..40] + "..."
-		else
-			proprietario = @stallaoper.prop.prop
-		end
-		testo2 = "DETENTORE:  #{detentore}  -  PROPRIETARIO:  #{proprietario}"
-		boh2 = foglio.text_width(testo, dimcar) / 2.0
-		q2 = qragsoc - (dimcar * 1.5)
-		m2 = x - boh2
-		foglio.add_text(z, q2, testo2, dimcar)
-
-
-
+		foglio.add_text(m, y, testo, dimcar)
 		spostapagina = x + 36
 		foglio.start_page_numbering(w-20, foglio.absolute_bottom_margin, 8, nil, "pag. <PAGENUM> di <TOTALPAGENUM>")
 		foglio.restore_state
@@ -104,7 +69,7 @@ def stampapres(finestra)
 	}
 	data = Array.new
 	selcapi.each do |i, index|
-		data << {"prog" => "#{i.progressivo.to_s}", "marca" => "#{i.marca}", "razza" => "#{i.razza}", "sesso" => "#{i.sesso}", "madre" => "#{i.madre}", "nc" => "#{i.tipoingresso}", "nascita" => "#{i.datanascita.strftime("%d/%m/%Y")}", "ingresso" => "#{i.dataingresso.strftime("%d/%m/%Y")}", "prov" => "#{i.provenienza}"}
+		data << {"prog" => "", "marca" => "#{i.marca}"}
 	end
 foglio.margins_mm(15, 10, 10)
 	if data.length != 0

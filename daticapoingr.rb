@@ -383,7 +383,12 @@ def inscapo
 					@combonaznas.set_active(contanaz)
 				else
 					@combonazorig.set_active(contanaz)
-					@combonaznas.set_active(21)
+					#@combonaznas.set_active(21)
+					y = -1
+					while @combonaznas.active_iter[2] != "IT"
+						y+=1
+						@combonaznas.set_active(y)
+					end
 				end
 			end
 			if @marca.text[0,2].upcase == "IT" and @stallanas.text.upcase == @stallaoper.stalle.cod317 #nascita
@@ -450,7 +455,8 @@ def inscapo
 		#puts "razza inesistente"
 	end
 
-	@nnaz = @combonaznas.active
+	#@nnaz = @combonaznas.active
+	#if @comboing.active_iter[0] == 
 	#if @marca.text == nil or @comborazze.active == -1 or @nascita.text == nil or @combonazorig.active == -1 or @combonaznas.active == -1 or @comboing.active == -1
 	if @marca.text == "" or @razzaid == 0 or @nascita.text == "" or @combonazorig.active == -1 or @combonaznas.active == -1 or @comboing.active == -1 or @madre.text == ""
 		Errore.avviso(finestraingr, "Mancano dei dati obbligatori.")
@@ -497,12 +503,15 @@ def inscapo
 #		puts @depositoingr.length
 		if @comboing.active_iter[0] == 1
 #			puts "nascita"
+			@nnaz = "IT"
 			mascnascita(finestraingr, labelingr)
 		elsif @comboing.active_iter[0] == 13 or @comboing.active_iter[0] == 32
 #			puts "prima importazione"
+			@nnaz = @combonaznas.active_iter[2]
 			mascprimimp(finestraingr, labelingr)
 		else
 #			puts "altro"
+			@nnaz = "IT"
 			mascingressi(finestraingr, labelingr)
 		end
 	end

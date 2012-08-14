@@ -13,6 +13,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	boxinsaut6 = Gtk::HBox.new(false, 5)
 	boxinsaut7 = Gtk::HBox.new(false, 5)
 	boxinsaut8 = Gtk::HBox.new(false, 5)
+	boxinsaut9 = Gtk::HBox.new(false, 5)
 	boxinsautv.pack_start(boxinsaut1, false, false, 5)
 	boxinsautv.pack_start(boxinsaut2, false, false, 5)
 	boxinsautv.pack_start(boxinsaut3, false, false, 5)
@@ -21,8 +22,11 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	boxinsautv.pack_start(boxinsaut6, false, false, 5)
 	boxinsautv.pack_start(boxinsaut7, false, false, 5)
 	boxinsautv.pack_start(boxinsaut8, false, false, 5)
+	boxinsautv.pack_start(boxinsaut9, false, false, 5)
 	minsaut.add(boxinsautv)
 
+	listadet = Gtk::ListStore.new(Integer, String, Integer)
+	combodet = Gtk::ComboBox.new(listadet)
 	listaprop = Gtk::ListStore.new(Integer, String, Integer, String, String)
 	comboprop = Gtk::ComboBox.new(listaprop)
 	labelstalla = Gtk::Label.new("Stalla di destinazione:")
@@ -38,18 +42,139 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	ragsoc.text = alldestragsoc
 	ragsoc.editable=(false)
 	boxinsaut2.pack_start(ragsoc, false, false, 5)
-
+	#puts "alldir:"
+	#puts alldir.inspect
 	#prop = Relazs.find(:all, :from => "relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
 #	labelprop = Gtk::Label.new("Seleziona il proprietario:")
-	alldir.each do |p|
-		iter = listaprop.append
-		iter[0] = p.id.to_i
-		iter[1] = p.prop.prop.to_s
-		iter[2] = p.prop_id.to_i
-		iter[3] = p.atp
-		iter[4] = "-"
-		
+
+	alldir.each do |d|
+		iter = listadet.append
+		iter[0] = d.id.to_i
+		iter[1] = d.detentori.detentore.to_s
+		iter[2] = d.detentori_id.to_i
+#		iter[3] = d.atp
+#		iter[4] = "-"
 	end
+	arrconfronto = []
+	x = nil
+	listadet.each do |modello, percorso, iterat|
+	(iterat[1] == x) and arrconfronto.push(Gtk::TreeRowReference.new(modello, percorso))
+	x = iterat[1]
+	end
+	arrconfronto.each do |rif|
+		(percorso = rif.path) and listadet.remove(listadet.get_iter(percorso))
+	end
+#	if seldet.length == 1
+#		combodet.active = 0
+#	else
+#		#listacombo3.clear
+#	end
+=begin
+	combodet.signal_connect( "changed" ) {
+		if combodet.active != -1
+			#@idragsoc = combo2.active
+			seldet = Relazs.find(:all, :from => "relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			alldir.each do |a|
+				if a.detentori_id == combodet.active(2)
+					selprop << a
+				end
+			end
+			puts "selprop"
+			puts selprop.inspect
+			#seldet = Relazs.find(:all, :from => "props, relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			listacomboprop.clear
+			selprop.each do |p|
+				iter = listacombodet.append
+				iter[0] = p.id.to_i
+				iter[1] = p.prop.prop.to_s
+				iter[2] = p.prop_id.to_i
+				iter[3] = p.atp
+				iter[4] = "-"
+			end
+			arrconfronto = []
+			x = nil
+			listacombodet.each do |modello, percorso, iterat|
+			(iterat[1] == x) and arrconfronto.push(Gtk::TreeRowReference.new(modello, percorso))
+			x = iterat[1]
+			end
+			arrconfronto.each do |rif|
+				(percorso = rif.path) and listacombodet.remove(listacombodet.get_iter(percorso))
+			end
+			if seldet.length == 1
+				combodet.active = 0
+			else
+				listacombo3.clear
+			end
+		else
+		end
+	}
+=end
+	renderer = Gtk::CellRendererText.new
+	combodet.pack_start(renderer,false)
+	renderer.visible=(false)
+	combodet.set_attributes(renderer, :text => 0)
+	renderer1 = Gtk::CellRendererText.new
+	combodet.pack_start(renderer1,false)
+	combodet.set_attributes(renderer1, :text => 1)
+	renderer2 = Gtk::CellRendererText.new
+	renderer2.visible=(false)
+	combodet.pack_start(renderer2,false)
+	combodet.set_attributes(renderer2, :text => 2)
+	labeldet = Gtk::Label.new("Seleziona il detentore di destinazione:")
+	boxinsaut3.pack_start(labeldet, false, false, 5)
+	boxinsaut3.pack_start(combodet, false, false, 0)
+
+
+	combodet.signal_connect( "changed" ) {
+		if combodet.active != -1
+			#@idragsoc = combo2.active
+			#seldet = Relazs.find(:all, :from => "relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			selprop = []
+			alldir.each do |a|
+				if a.detentori_id == combodet.active_iter[2]
+					selprop << a
+				end
+			end
+			#puts "selprop"
+			#puts selprop.inspect
+			#seldet = Relazs.find(:all, :from => "props, relazs", :conditions => ["relazs.stalle_id= ?  and relazs.ragsoc_id= ?", "#{combo.active_iter[0]}", "#{combo2.active_iter[2]}"])
+			listaprop.clear
+			selprop.each do |p|
+				iter = listaprop.append
+				iter[0] = p.id.to_i
+				iter[1] = p.prop.prop.to_s
+				iter[2] = p.prop_id.to_i
+				iter[3] = p.atp
+				iter[4] = "-"
+			end
+#			arrconfronto = []
+#			x = nil
+#			listacomboprop.each do |modello, percorso, iterat|
+#			(iterat[1] == x) and arrconfronto.push(Gtk::TreeRowReference.new(modello, percorso))
+#			x = iterat[1]
+#			end
+#			arrconfronto.each do |rif|
+#				(percorso = rif.path) and listacombodet.remove(listacombodet.get_iter(percorso))
+#			end
+#			if seldet.length == 1
+#				combodet.active = 0
+#			else
+#				listacombo3.clear
+#			end
+		else
+		end
+	}
+
+
+#	alldir.each do |p|
+#		iter = listaprop.append
+#		iter[0] = p.id.to_i
+#		iter[1] = p.prop.prop.to_s
+#		iter[2] = p.prop_id.to_i
+#		iter[3] = p.atp
+#		iter[4] = "-"
+
+#	end
 	renderer = Gtk::CellRendererText.new
 	comboprop.pack_start(renderer,false)
 	renderer.visible=(false)
@@ -68,35 +193,35 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	comboprop.pack_start(renderer4,false)
 	comboprop.set_attributes(renderer4, :text => 3)
 	labelprop = Gtk::Label.new("Seleziona il proprietario di destinazione:")
-	boxinsaut3.pack_start(labelprop, false, false, 5)
-	boxinsaut3.pack_start(comboprop, false, false, 0)
+	boxinsaut4.pack_start(labelprop, false, false, 5)
+	boxinsaut4.pack_start(comboprop, false, false, 0)
 
 
 	labeldataingr = Gtk::Label.new("Data ingresso (GGMMAA):")
-	boxinsaut4.pack_start(labeldataingr, false, false, 5)
+	boxinsaut5.pack_start(labeldataingr, false, false, 5)
 	dataingr = Gtk::Entry.new
 	dataingr.text = datausc
 	#dataingr.editable=(false)
-	boxinsaut4.pack_start(dataingr, false, false, 5)
+	boxinsaut5.pack_start(dataingr, false, false, 5)
 
 	labelmod4 = Gtk::Label.new("Modello 4 di ingresso:")
-	boxinsaut5.pack_start(labelmod4, false, false, 5)
+	boxinsaut6.pack_start(labelmod4, false, false, 5)
 	mod4ingr = Gtk::Entry.new
 	mod4ingr.text = mod4
 	#dataingr.editable=(false)
-	boxinsaut5.pack_start(mod4ingr, false, false, 5)
+	boxinsaut6.pack_start(mod4ingr, false, false, 5)
 
 	labeldatamod4 = Gtk::Label.new("Data modello 4:")
-	boxinsaut6.pack_start(labeldatamod4, false, false, 5)
+	boxinsaut7.pack_start(labeldatamod4, false, false, 5)
 	datamod4ingr = Gtk::Entry.new
 	datamod4ingr.text = datamod4usc
 	#dataingr.editable=(false)
-	boxinsaut6.pack_start(datamod4ingr, false, false, 5)
+	boxinsaut7.pack_start(datamod4ingr, false, false, 5)
 
 	#Motivo ingresso
 
 	labelmotivoi = Gtk::Label.new("Motivo ingresso:")
-	boxinsaut7.pack_start(labelmotivoi, false, false, 5)
+	boxinsaut8.pack_start(labelmotivoi, false, false, 5)
 	listaing = Gtk::ListStore.new(Integer, String)
 	#comboing = Gtk::ComboBox.new
 
@@ -116,7 +241,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	comboing.pack_start(rendering,false)
 	comboing.set_attributes(rendering, :text => 0)
 
-	boxinsaut7.pack_start(comboing, false, false, 5)
+	boxinsaut8.pack_start(comboing, false, false, 5)
 
 	if motivousc == 3
 		comboing.set_active(0)
@@ -139,7 +264,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 	#Bottone di inserimento ingressi
 
 	bottinserisci = Gtk::Button.new( "Inserisci" )
-	boxinsaut8.pack_start(bottinserisci, false, false, 5)
+	boxinsaut9.pack_start(bottinserisci, false, false, 5)
 	bottinserisci.signal_connect("clicked") {
 		if comboprop.active == -1
 			Errore.avviso(minsaut, "Seleziona un proprietario.")
@@ -164,6 +289,7 @@ def insautomatico(finestra, listasel, alldestragsoc, alldest317, alldir, motivou
 				madreusc = iter[13]
 				padreusc = iter[14]
 				#puts marcausc
+				#puts comboprop.active_iter[0]
 				Animals.create(:relaz_id => "#{comboprop.active_iter[0]}", :tipo => "I", :cm_ing => "#{comboing.active_iter[0]}", :marca => "#{marcausc}", :specie=> "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :data_ingr => "#{dataingringl}", :allevamenti_id => "#{allprov.id}", :naz_prov => "#{nazprimimpusc}", :mod4 => "#{mod4}", :data_mod4 => "#{datamod4ingl}")
 			end
 			Conferma.conferma(minsaut, "Capi inseriti correttamente.")

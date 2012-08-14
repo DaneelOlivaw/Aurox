@@ -616,6 +616,7 @@ def modificacapousc(selcapo)
 			Errore.avviso(modcapousc, "Errore generico")
 			errore = 1
 		end
+		#puts "Errore = #{errore.inspect}"
 		if errore == nil
 			dataingingl = datausc.text[4,2] + datausc.text[2,2] + datausc.text[0,2]
 			dataingingl = Time.parse("#{dataingingl}").strftime("%Y")[0,2] + dataingingl
@@ -665,8 +666,8 @@ def modificacapousc(selcapo)
 				regusc = "M"
 			elsif combomovusc.active_iter[0] == 6
 				regusc = "F"
-			elsif combomovusc.active_iter[0] == 20
-				regusc = "C"
+#			elsif combomovusc.active_iter[0] == 20
+#				regusc = "C"
 			else
 				regusc = "V"
 			end
@@ -677,7 +678,8 @@ def modificacapousc(selcapo)
 			else
 				regdest = comboalldest.active_iter[3]
 			end
-			Registros.update(capomodreg.id, {:marca => "#{marca.text.upcase}", :tipouscita => "#{regusc}", :datauscita => "#{datauscingl.to_i}", :destinazione => "#{regdest}", :mod4usc => "#{mod4.text.upcase}", :certsanusc => "#{certsan.text.upcase}"})
+			capomodregid = capomodreg.id
+			Registros.update(capomodregid, {:marca => "#{marca.text.upcase}", :tipouscita => "#{regusc}", :datauscita => "#{datauscingl.to_i}", :destinazione => "#{regdest}", :mod4usc => "#{mod4.text.upcase}", :certsanusc => "#{certsan.text.upcase}"})
 		end
 	Conferma.conferma(modcapousc, "Movimento modificato.")
 	modcapousc.destroy

@@ -1,6 +1,6 @@
-# Visualizza movimenti
+# Visualizza movimenti2
 
-def vismovimenti
+def vismovimenti2(selmov, datainizio, datafine)
 	mvismov = Gtk::Window.new("Vista movimenti")
 	#mvismov.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	mvismov.set_default_size(800, 600)
@@ -14,7 +14,12 @@ def vismovimenti
 	conto = 0
 	labelconto = Gtk::Label.new("Movimenti trovati: #{conto}")
 	mvismov.add(boxmovv)
-
+	bottstampa = Gtk::Button.new( "Stampa" )
+	bottstampa.signal_connect("clicked") {
+		stampagenericaingr(selmov, datainizio, datafine)
+	}
+	boxmovv.pack_start(bottstampa, false, false, 0)
+=begin
 	def riempimento(selmov, lista, labelconto)
 	#def riempimento(selmov, lista, conto)
 		selmov.each do |m|
@@ -126,13 +131,13 @@ def vismovimenti
 	#conto = selmov.length
 	labelconto.text = ("Movimenti trovati: #{selmov.length}")
 	end
-
-	visingressi = Gtk::Button.new( "Visualizza ingressi" )
-	visuscite = Gtk::Button.new( "Visualizza uscite" )
-	vispresenti = Gtk::Button.new( "Visualizza presenti in stalla" )
-	vistutti = Gtk::Button.new( "Visualizza tutti" )
-	visricerca = Gtk::Button.new( "Cerca capo" )
-	visricercaentry = Gtk::Entry.new
+=end
+	stampa = Gtk::Button.new( "Stampa risultato" )
+#	visuscite = Gtk::Button.new( "Visualizza uscite" )
+#	vispresenti = Gtk::Button.new( "Visualizza presenti in stalla" )
+#	vistutti = Gtk::Button.new( "Visualizza tutti" )
+#	visricerca = Gtk::Button.new( "Cerca capo" )
+#	visricercaentry = Gtk::Entry.new
 	lista = Gtk::ListStore.new(Integer, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String, String)
 	vista = Gtk::TreeView.new(lista)
 	vista.selection.mode = Gtk::SELECTION_SINGLE #BROWSE #SINGLE #MULTIPLE
@@ -140,6 +145,11 @@ def vismovimenti
 	vista.rules_hint = true
 #	vista.set_enable_grid_lines(true)
 #	@relid = @combo3.active_iter[0]
+
+	riempimento2(selmov, lista, labelconto, datainizio, datafine)
+
+
+=begin
 	visingressi.signal_connect("clicked") {
 		lista.clear
 		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "I"], :order => ["data_ingr"])
@@ -165,6 +175,7 @@ def vismovimenti
 		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and marca LIKE ?", "#{@stallaoper.id}", "%#{visricercaentry.text}%"])
 		riempimento(selmov, lista, labelconto)
 	}
+=end
 		cella = Gtk::CellRendererText.new
 		colonna1 = Gtk::TreeViewColumn.new("Tipo movimento", cella)
 		colonna1.resizable = true
@@ -300,12 +311,12 @@ def vismovimenti
 		vista.append_column(colonna43)
 	mvismovscroll.add(vista)
 	boxmov2.pack_start(mvismovscroll, true, true, 0)
-	boxmov1.pack_start(visingressi, false, false, 0)
-	boxmov1.pack_start(visuscite, false, false, 0)
-	boxmov1.pack_start(vispresenti, false, false, 0)
-	boxmov1.pack_start(vistutti, false, false, 0)
-	boxmov1.pack_start(visricerca, false, false, 5)
-	boxmov1.pack_start(visricercaentry, false, false, 0)
+#	boxmov1.pack_start(visingressi, false, false, 0)
+#	boxmov1.pack_start(visuscite, false, false, 0)
+#	boxmov1.pack_start(vispresenti, false, false, 0)
+#	boxmov1.pack_start(vistutti, false, false, 0)
+#	boxmov1.pack_start(visricerca, false, false, 5)
+#	boxmov1.pack_start(visricercaentry, false, false, 0)
 	boxmov1.pack_start(labelconto, false, false, 5)
 
 	bottchiudi = Gtk::Button.new( "Chiudi" )
@@ -314,18 +325,18 @@ def vismovimenti
 	}
 	boxmovv.pack_start(bottchiudi, false, false, 0)
 
-	vista.signal_connect("row-activated") do |view, path, column|
-		selcapo = vista.selection
-		if selcapo.selected[45] == "SI"
-			Conferma.conferma(mvismov, "Attenzione: il capo si trova nel registro; le modifiche saranno apportate anche in quest'ultimo. Nel caso sia stato stampato sul vidimato, ricordarsi di modificarlo a mano previo accordo col funzionario preposto.")
-		end
-		if selcapo.selected[1] == "I" #and @selcapo.selected[45] == "NO"
-			modificacapo(selcapo)
-		elsif selcapo.selected[1] == "U" #and @selcapo.selected[45] == "NO"
-			modificacapousc(selcapo)
-		#else
-			#Avvisoprova.avviso(mvismov, "Il movimento è stato inserito nel registro, per cui non è più possibile modificarlo.")
-		end
-	end
+#	vista.signal_connect("row-activated") do |view, path, column|
+#		selcapo = vista.selection
+#		if selcapo.selected[45] == "SI"
+#			Conferma.conferma(mvismov, "Attenzione: il capo si trova nel registro; le modifiche saranno apportate anche in quest'ultimo. Nel caso sia stato stampato sul vidimato, ricordarsi di modificarlo a mano previo accordo col funzionario preposto.")
+#		end
+#		if selcapo.selected[1] == "I" #and @selcapo.selected[45] == "NO"
+#			modificacapo(selcapo)
+#		elsif selcapo.selected[1] == "U" #and @selcapo.selected[45] == "NO"
+#			modificacapousc(selcapo)
+#		#else
+#			#Avvisoprova.avviso(mvismov, "Il movimento è stato inserito nel registro, per cui non è più possibile modificarlo.")
+#		end
+#	end
 	mvismov.show_all
 end

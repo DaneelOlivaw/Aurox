@@ -81,10 +81,10 @@ def modprop
 	#Identificativo fiscale
 
 	labelidfisc = Gtk::Label.new("Identificativo fiscale:")
-	boxmodprop3.pack_start(labelidfisc, false, false, 5)
+	boxmodprop4.pack_start(labelidfisc, false, false, 5)
 	@idfisc = Gtk::Entry.new()
 #	@idfisc.max_length=(16)
-	boxmodprop3.pack_start(@idfisc, false, false, 5)
+	boxmodprop4.pack_start(@idfisc, false, false, 5)
 
 	@comboprop.signal_connect( "changed" ) {
 		@nomeprop.text=("#{@comboprop.active_iter[1]}")

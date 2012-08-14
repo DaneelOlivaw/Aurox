@@ -117,7 +117,13 @@ def mascingressi(finestraingr, labelingr)
 	@combonazprov.pack_start(renderer1,false)
 	@combonazprov.set_attributes(renderer1, :text => 2)
 	boxing5.pack_start(@combonazprov, false, false, 0)
-	@combonazprov.set_active(@nnaz)
+	#@combonazprov.set_active(@nnaz)
+	@combonazprov.set_active(0)
+	contaprov = -1
+	while @combonazprov.active_iter[2] != @nnaz
+		contaprov+=1
+		@combonazprov.set_active(contaprov)
+	end
 
 	#Modello 4
 

@@ -29,16 +29,16 @@ def mascregnonvidim
 	boxregnv1.pack_start(labelanno, false, false, 5)
 	boxregnv1.pack_start(comboanno, false, false, 0)
 
-	stampaingrnv = Gtk::Button.new("Stampa registro di carico")
+	stampaingrnv = Gtk::Button.new("Stampa ingressi")
 	boxregnvv.pack_start(stampaingrnv, false, false, 5)
-	stampauscnv = Gtk::Button.new("Stampa registro di scarico")
+	stampauscnv = Gtk::Button.new("Stampa uscite")
 	boxregnvv.pack_start(stampauscnv, false, false, 5)
-	stamparegnv = Gtk::Button.new("Stampa registro nuovo")
+	stamparegnv = Gtk::Button.new("Stampa registro")
 	boxregnvv.pack_start(stamparegnv, false, false, 5)
 
 	stampaingrnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"]) == nil
+		if Registros.find(:first, :conditions => ["relaz_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
 			#conto = Registros.find(:first, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"])
@@ -49,7 +49,7 @@ def mascregnonvidim
 	}
 	stampauscnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:first, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["datauscita, id"]) == nil
+		if Registros.find(:first, :conditions => ["relaz_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"], :order => ["datauscita, id"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
 			registrouscnv(comboanno)
@@ -57,7 +57,7 @@ def mascregnonvidim
 	}
 	stamparegnv.signal_connect("clicked") {
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		if Registros.find(:first, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"]) == nil
+		if Registros.find(:first, :conditions => ["relaz_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"]) == nil
 			Conferma.conferma(mregnonvidim, "Nessun capo presente.")
 		else
 			registronv(comboanno)
@@ -73,6 +73,7 @@ end
 
 def registroingrnv(comboanno)
 	foglio = PDF::Writer.new(:paper => "A4") # , :font_size => 5)
+	foglio.margins_mm(5, 8, 12, 13)
 	foglio.select_font("Helvetica")
 	foglio.open_object do |testa|
 		foglio.save_state
@@ -81,11 +82,70 @@ def registroingrnv(comboanno)
 		y = foglio.absolute_top_margin
 		z = foglio.absolute_left_margin
 		w = foglio.absolute_right_margin
-		testo = "<b>Registro non vidimato di carico della stalla #{@stallaoper.stalle.cod317} di #{@stallaoper.ragsoc.ragsoc}</b>"
+		testo = "MOVIMENTI DI CARICO DELLA STALLA #{@stallaoper.stalle.cod317}"
 		boh = foglio.text_width(testo, dimcar) / 2.0
 		q = foglio.absolute_top_margin - (dimcar * 1.5)
 		m = x - boh
-		foglio.add_text(m, y, testo, dimcar)
+		foglio.add_text(z, y, testo, dimcar)
+		
+		testoragsoc = "RAGIONE SOCIALE:  #{@stallaoper.prop.prop}"
+		qragsoc = foglio.absolute_top_margin - (dimcar * 1.5)
+		foglio.add_text(z, qragsoc, testoragsoc, dimcar)
+
+
+		if @stallaoper.detentori.detentore.length > 40
+			detentore = @stallaoper.detentori.detentore[0..40] + "..."
+		else
+			detentore = @stallaoper.detentori.detentore
+		end
+		if @stallaoper.prop.prop.length > 40
+			proprietario = @stallaoper.prop.prop[0..40] + "..."
+		else
+			proprietario = @stallaoper.prop.prop
+		end
+		testo2 = "DETENTORE:  #{detentore}  -  PROPRIETARIO:  #{proprietario}"
+		boh2 = foglio.text_width(testo, dimcar) / 2.0
+		q2 = qragsoc - (dimcar * 1.5)
+		m2 = x - boh2
+		foglio.add_text(z, q2, testo2, dimcar)
+		
+		
+		
+
+#		bohragsoc = foglio.text_width(testo, dimcar) / 2.0
+
+#		mragsoc = x - boh2
+
+
+		if @stallaoper.detentori.detentore.length > 40
+			detentore = @stallaoper.detentori.detentore[0..40] + "..."
+		else
+			detentore = @stallaoper.detentori.detentore
+		end
+		if @stallaoper.prop.prop.length > 40
+			proprietario = @stallaoper.prop.prop[0..40] + "..."
+		else
+			proprietario = @stallaoper.prop.prop
+		end
+		testo2 = "DETENTORE:  #{detentore}  -  PROPRIETARIO:  #{proprietario}"
+		boh2 = foglio.text_width(testo, dimcar) / 2.0
+		q2 = qragsoc - (dimcar * 1.5)
+		m2 = x - boh2
+		foglio.add_text(z, q2, testo2, dimcar)
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		spostapagina = x + 36
 		foglio.start_page_numbering(w-20, foglio.absolute_bottom_margin, 8, nil, "pag. <PAGENUM> di <TOTALPAGENUM>")
 		foglio.restore_state
@@ -143,7 +203,7 @@ def registroingrnv(comboanno)
 	data = Array.new
 
 		#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper.id}'")
-		selcapi = Registros.find(:all, :conditions => ["contatori_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"])
+		selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and YEAR(dataingresso) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"])
 	selcapi.each do |i, index|
 		data << {"prog" => "#{i.progressivo.to_s}", "marca" => "#{i.marca}", "razza" => "#{i.razza}", "sesso" => "#{i.sesso}", "madre" => "#{i.madre}",	"nc" => "#{i.tipoingresso}", "nascita" => "#{i.datanascita.strftime("%d/%m/%Y")}", "ingresso" => "#{i.dataingresso.strftime("%d/%m/%Y")}", "prov" => "#{i.provenienza}"}
 	end

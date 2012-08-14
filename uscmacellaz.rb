@@ -130,7 +130,7 @@ def datimacellazione(finestra, muscite, listasel, combousc)
 	labelmod4usc = Gtk::Label.new("Modello 4:")
 	boxusc8.pack_start(labelmod4usc, false, false, 5)
 	mod4usc = Gtk::Entry.new()
-	progmod4 = @stallaoper.contatori.mod4usc.split("/")
+	progmod4 = @stallaoper.mod4usc.split("/")
 	progmod41 = progmod4[0].to_i
 #	anno = @giorno.strftime("%y")
 #		if progmod4[1].to_i == anno.to_i
@@ -221,8 +221,8 @@ def datimacellazione(finestra, muscite, listasel, combousc)
 			usc = Animals.find(:first, :conditions => ["idcoll = ?", "#{marcauscid}"])
 			Animals.update(marcauscid, { :uscito => "1", :idcoll => "#{usc.id}"})
 		end
-		Contatoris.update(@stallaoper.contatori.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
-		@stallaoper.contatori.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
+		Relazs.update(@stallaoper.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
+		@stallaoper.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
 		#puts @s.contatori.mod4usc
 		listamacdest == nil
 		Conferma.conferma(mdatimacellazione, "Capi usciti correttamente.")

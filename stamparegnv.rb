@@ -1,5 +1,6 @@
 def registronv(comboanno)
 	fogliousc = PDF::Writer.new(:paper => "A4", :orientation => :landscape) # , :font_size => 5)
+	fogliousc.margins_mm(7, 5, 12, 13)
 	fogliousc.select_font("Helvetica")
 	fogliousc.open_object do |testa|
 		fogliousc.save_state
@@ -8,18 +9,25 @@ def registronv(comboanno)
 		y = fogliousc.absolute_top_margin
 		z = fogliousc.absolute_left_margin
 		w = fogliousc.absolute_right_margin
-		testo = "<b>Registro non vidimato della stalla #{@stallaoper.stalle.cod317} di #{@stallaoper.ragsoc.ragsoc}</b>"
+		testo = "REGISTRO NON VIDIMATO DELLA STALLA #{@stallaoper.stalle.cod317}"
 		boh = fogliousc.text_width(testo, dimcar) / 2.0
 		q = fogliousc.absolute_top_margin - (dimcar * 1.5)
 		m = x - boh
-		fogliousc.add_text(m, y, testo, dimcar)
+		fogliousc.add_text(z, y, testo, dimcar)
+		fogliousc.add_text(z, q, "RAGIONE SOCIALE: #{@stallaoper.ragsoc.ragsoc}", dimcar)
+		testo2 = "DETENTORE: #{@stallaoper.detentori.detentore} - PROPRIETARIO: #{@stallaoper.prop.prop}"
+		ltesto2 = fogliousc.text_width(testo2, dimcar) / 2.0
+		oriztesto2 = x - ltesto2
+		q2 = q -(dimcar*1.5)
+		#registro.add_text(oriztesto2, q2, testo2, dimcar)
+		fogliousc.add_text(z, q2, testo2, dimcar)
 		spostapagina = x + 36
 		fogliousc.start_page_numbering(w-20, fogliousc.absolute_bottom_margin, 8, nil, "pag. <PAGENUM> di <TOTALPAGENUM>")
 		fogliousc.restore_state
 		fogliousc.close_object
 		fogliousc.add_object(testa, :all_pages)
 	end
-	fogliousc.margins_mm(15, 5, 12)
+	fogliousc.margins_mm(17, 5, 15)
 	tabellausc = PDF::SimpleTable.new
 	tabellausc.show_lines = :all
 	tabellausc.show_headings = true
@@ -89,7 +97,7 @@ def registronv(comboanno)
 	}
 	data = Array.new
 	#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper}'")
-	selcapi = Registros.find(:all, :conditions => ["contatori_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.contatori_id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"])
+	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"])
 	selcapi.each do |i, index|
 		if i.tipouscita == "V" or i.tipouscita == "C"
 			mod4 = i.mod4usc.split("/")

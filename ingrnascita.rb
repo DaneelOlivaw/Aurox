@@ -57,7 +57,13 @@ def mascnascita(finestra, labelingr)
 	boxingnas5.pack_start(@combonazprov, false, false, 0)
 
 	@dataing.text = @nascita.text
-	@combonazprov.set_active(@nnaz) #sensitive=(false)
+	#@combonazprov.set_active(@nnaz) #sensitive=(false)
+	@combonazprov.set_active(0)
+	contaprov = -1
+	while @combonazprov.active_iter[2] != @nnaz
+		contaprov+=1
+		@combonazprov.set_active(contaprov)
+	end
 
 	#Bottone di inserimento ingressi
 

@@ -583,83 +583,87 @@ def modificacapo(selcapo)
 	bottmodcapo.signal_connect("clicked") {
 		errore = nil
 		begin
-		datanasingl = nascita.text[4,2] + nascita.text[2,2] + nascita.text[0,2]
-		datanasingl = Time.parse("#{datanasingl}").strftime("%Y")[0,2] + datanasingl
-		Time.parse("#{datanasingl}")
-		if marca.text == "" or comborazze.active == -1 or nascita.text == "" or combonazorig.active == -1 or combonaznas.active == -1 or combomovingr.active == -1
-			Errore.avviso(modcapo, "Mancano dei dati obbligatori.")
-			errore = 1
-		elsif marca.text[0,2].upcase == "IT" and marca.text.length < 14
-			Errore.avviso(modcapo, "Marca corta.")
-			errore = 1
-		elsif nascita.text.to_i == 0
-			Errore.avviso(modcapo, "Data di nascita errata.")
-			errore = 1
-		elsif dataingr.text.to_i == 0
-			Errore.avviso(modcapo, "Data di ingresso errata.")
-			errore = 1
-		elsif marcatura.text != "" and marcatura.text.to_i == 0
-			Errore.avviso(modcapo, "lettere.")
-			errore = 1
-		elsif marcatura.text == "" #or @marcatura.text == 0 	#	elsif @datamod4.text != "" and @datamod4.text.to_i != 0
-			datamarcingl = ""
-		end
-		if Time.parse("#{datanasingl}") > @giorno
-				Errore.avviso(modcapo, "La data di nascita non può essere successiva al giorno odierno.")
+			datanasingl = nascita.text[4,2] + nascita.text[2,2] + nascita.text[0,2]
+			datanasingl = Time.parse("#{datanasingl}").strftime("%Y")[0,2] + datanasingl
+			Time.parse("#{datanasingl}")
+			if marca.text == "" or comborazze.active == -1 or nascita.text == "" or combonazorig.active == -1 or combonaznas.active == -1 or combomovingr.active == -1
+				Errore.avviso(modcapo, "Mancano dei dati obbligatori.")
 				errore = 1
-		end
+			elsif marca.text[0,2].upcase == "IT" and marca.text.length < 14
+				Errore.avviso(modcapo, "Marca corta.")
+				errore = 1
+			elsif nascita.text.to_i == 0
+				Errore.avviso(modcapo, "Data di nascita errata.")
+				errore = 1
+			elsif dataingr.text.to_i == 0
+				Errore.avviso(modcapo, "Data di ingresso errata.")
+				errore = 1
+			elsif marcatura.text != "" and marcatura.text.to_i == 0
+				Errore.avviso(modcapo, "lettere.")
+				errore = 1
+			elsif marcatura.text == "" #or @marcatura.text == 0 	#	elsif @datamod4.text != "" and @datamod4.text.to_i != 0
+				datamarcingl = ""
+			end
+			if Time.parse("#{datanasingl}") > @giorno
+					Errore.avviso(modcapo, "La data di nascita non può essere successiva al giorno odierno.")
+					errore = 1
+			end
 		rescue Exception => errore
 			Errore.avviso(modcapo, "Errore generico")
 			errore = 1
 		end
 
 		if errore == nil
-		dataingingl = dataingr.text[4,2] + dataingr.text[2,2] + dataingr.text[0,2]
-		dataingingl = Time.parse("#{dataingingl}").strftime("%Y")[0,2] + dataingingl
-		if marcatura.text != ""
-			datamarcingl = marcatura.text[4,2] + marcatura.text[2,2] + marcatura.text[0,2]
-			datamarcingl = Time.parse("#{datamarcingl}").strftime("%Y")[0,2] + datamarcingl
-		else
-			datamarcingl = ""
-		end
-		if datamod4.text != ""
-			datamod4ingl = datamod4.text[4,2] + datamod4.text[2,2] + datamod4.text[0,2]
-			datamod4ingl = Time.parse("#{datamod4ingl}").strftime("%Y")[0,2] + datamod4ingl
-		else
-			datamod4ingl = nil
-		end
-
-		if comboallprov.active == -1
-			allprov = ""
-		else
-			allprov = comboallprov.active_iter[0]
-		end
-			Animals.update(capomod[0], {:marca => "#{marca.text.upcase}", :specie => "#{valspecie}", :razza_id => "#{comborazze.active_iter[0]}", :data_nas => "#{datanasingl.to_i}", :sesso => "#{valsesso}", :stalla_nas => "#{stallanas.text.upcase}", :naz_orig => "#{combonazorig.active_iter[2]}", :naz_nasprimimp => "#{combonaznas.active_iter[2]}", :data_applm => "#{datamarcingl}", :ilg => "#{valgen}", :embryo => "#{valembryo}", :marca_prec => "#{prec.text.upcase}", :marca_madre => "#{madre.text.upcase}", :marca_padre => "#{padre.text.upcase}", :donatrice => "#{don.text.upcase}", :clg => "#{libgen.text.upcase}", :cm_ing => "#{combomovingr.active_iter[0]}", :data_ingr => "#{dataingingl.to_i}", :naz_prov => "#{combonazprov.active_iter[2]}", :certsan => "#{certsan.text.upcase}", :rifloc => "#{rifloc.text.upcase}", :allevamenti_id => "#{allprov}", :mod4 => "#{mod4.text}", :data_mod4 => "#{datamod4ingl.to_i}"})
-		if capomod[45] == "SI"
-			#puts "vero"
-			if combomovingr.active_iter[0] == 1
-				regingr = "N"
-			elsif combomovingr.active_iter[0] == 19
-				regingr = "C"
+			dataingingl = dataingr.text[4,2] + dataingr.text[2,2] + dataingr.text[0,2]
+			dataingingl = Time.parse("#{dataingingl}").strftime("%Y")[0,2] + dataingingl
+			if marcatura.text != ""
+				datamarcingl = marcatura.text[4,2] + marcatura.text[2,2] + marcatura.text[0,2]
+				datamarcingl = Time.parse("#{datamarcingl}").strftime("%Y")[0,2] + datamarcingl
 			else
-				regingr = "A"
+				datamarcingl = ""
 			end
-			if combomovingr.active_iter[0] == 2 or combomovingr.active_iter[0] == 1 or combomovingr.active_iter[0] == 19 or combomovingr.active_iter[0] == 24 or combomovingr.active_iter[0] == 25 or combomovingr.active_iter[0] == 26
-				regprov = comboallprov.active_iter[3]
-			elsif combomovingr.active_iter[0] == 13 or combomovingr.active_iter[0] == 23 or combomovingr.active_iter[0] == 32
-				if certsan.text != "" #or iter.certsan != nil
-					regprov = certsan.text.upcase
+			if datamod4.text != ""
+				datamod4ingl = datamod4.text[4,2] + datamod4.text[2,2] + datamod4.text[0,2]
+				datamod4ingl = Time.parse("#{datamod4ingl}").strftime("%Y")[0,2] + datamod4ingl
+			else
+				datamod4ingl = nil
+			end
+
+			if comboallprov.active == -1
+				allprov = ""
+			else
+				allprov = comboallprov.active_iter[0]
+			end
+			Animals.update(capomod[0], {:marca => "#{marca.text.upcase}", :specie => "#{valspecie}", :razza_id => "#{comborazze.active_iter[0]}", :data_nas => "#{datanasingl.to_i}", :sesso => "#{valsesso}", :stalla_nas => "#{stallanas.text.upcase}", :naz_orig => "#{combonazorig.active_iter[2]}", :naz_nasprimimp => "#{combonaznas.active_iter[2]}", :data_applm => "#{datamarcingl}", :ilg => "#{valgen}", :embryo => "#{valembryo}", :marca_prec => "#{prec.text.upcase}", :marca_madre => "#{madre.text.upcase}", :marca_padre => "#{padre.text.upcase}", :donatrice => "#{don.text.upcase}", :clg => "#{libgen.text.upcase}", :cm_ing => "#{combomovingr.active_iter[0]}", :data_ingr => "#{dataingingl.to_i}", :naz_prov => "#{combonazprov.active_iter[2]}", :certsan => "#{certsan.text.upcase}", :rifloc => "#{rifloc.text.upcase}", :allevamenti_id => "#{allprov}", :mod4 => "#{mod4.text}", :data_mod4 => "#{datamod4ingl.to_i}"})
+			if capomod[45] == "SI"
+				#puts "vero"
+				if combomovingr.active_iter[0] == 1
+					regingr = "N"
+				elsif combomovingr.active_iter[0] == 19
+					regingr = "C"
 				else
-					regprov = rifloc.text.upcase
+					regingr = "A"
 				end
+				if combomovingr.active_iter[0] == 2 or combomovingr.active_iter[0] == 1 or combomovingr.active_iter[0] == 19 or combomovingr.active_iter[0] == 24 or combomovingr.active_iter[0] == 25 or combomovingr.active_iter[0] == 26
+					regprov = comboallprov.active_iter[3]
+				elsif combomovingr.active_iter[0] == 13 or combomovingr.active_iter[0] == 23 or combomovingr.active_iter[0] == 32
+					if certsan.text != "" #or iter.certsan != nil
+						regprov = certsan.text.upcase
+					else
+						regprov = rifloc.text.upcase
+					end
+				end
+				#capomodreg = Registros.find(:first, :conditions => "relaz_id='#{@stallaoper.id}' and marca LIKE '#{capomod[3]}' and dataingresso='#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}'")
+				capomodreg = Registros.find(:first, :conditions => ["relaz_id= ? and marca = ? and dataingresso= ?", "#{@stallaoper.id}", "#{capomod[3]}", "#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}"])
+				#puts capomodreg.id
+				#puts capomodreg.marca
+				Registros.update(capomodreg.id, {:marca => "#{marca.text.upcase}", :razza => "#{comborazze.active_iter[2]}", :sesso => "#{valsesso}", :madre => "#{madre.text.upcase}", :tipoingresso => "#{regingr}", :datanascita => "#{datanasingl.to_i}", :dataingresso => "#{dataingingl.to_i}", :provenienza => "#{regprov}", :mod4ingr => "#{mod4.text.upcase}", :certsaningr => "#{certsan.text.upcase}", :marcaprec => "#{prec.text.upcase}"})
 			end
-			capomodreg = Registros.find(:first, :conditions => "relaz_id='#{@stallaoper.id}' and marca='#{capomod[3]}' and dataingresso='#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}'")
-			#puts capomodreg.id
-			#puts capomodreg.marca
-			Registros.update(capomodreg.id, {:marca => "#{marca.text.upcase}", :razza => "#{comborazze.active_iter[2]}", :sesso => "#{valsesso}", :madre => "#{madre.text.upcase}", :tipoingresso => "#{regingr}", :datanascita => "#{datanasingl.to_i}", :dataingresso => "#{dataingingl.to_i}", :provenienza => "#{regprov}", :mod4ingr => "#{mod4.text.upcase}", :certsaningr => "#{certsan.text.upcase}", :marcaprec => "#{prec.text.upcase}"})
-		end
 			Conferma.conferma(modcapo, "Movimento modificato.")
 			modcapo.destroy
+		else
+			#puts "Errore"
+			#Errore.avviso(modcapo, "C'è un errore.")
 		end
 	}
 	boxmodc100.pack_start(bottmodcapo, false, false, 5)

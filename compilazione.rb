@@ -59,12 +59,12 @@ def compilazione(finestra, compingr, compusc, progr, anno)
 				progr += 1
 				#puts progr
 				#puts anno
-				Registros.create(:progressivo => "#{progr}/#{anno}", :marca => "#{arrayreg[1]}", :razza => "#{arrayreg[2]}", :sesso => "#{arrayreg[3]}", :madre => "#{arrayreg[4]}", :tipoingresso => "#{arrayreg[5]}", :datanascita => "#{arrayreg[6]}", :dataingresso => "#{arrayreg[7]}", :provenienza => "#{arrayreg[8]}", :mod4ingr => "#{arrayreg[9]}", :certsaningr => "#{arrayreg[10]}", :ragsoc => "#{arrayreg[11]}", :relaz_id => "#{arrayreg[12]}", :contatori_id => "#{@stallaoper.contatori.id}")
+				Registros.create(:progressivo => "#{progr}/#{anno}", :marca => "#{arrayreg[1]}", :razza => "#{arrayreg[2]}", :sesso => "#{arrayreg[3]}", :madre => "#{arrayreg[4]}", :tipoingresso => "#{arrayreg[5]}", :datanascita => "#{arrayreg[6]}", :dataingresso => "#{arrayreg[7]}", :provenienza => "#{arrayreg[8]}", :mod4ingr => "#{arrayreg[9]}", :certsaningr => "#{arrayreg[10]}", :ragsoc => "#{arrayreg[11]}", :relaz_id => "#{arrayreg[12]}")
 				Animals.update(arrayreg[0], { :registro => "1"})
 			end
 			#puts progr
 			#puts anno
-			Contatoris.update(@stallaoper.contatori.id, { :progreg => "#{progr}/#{anno}"})
+			Relazs.update(@stallaoper.id, { :progreg => "#{progr}/#{anno}"})
 		end
 		if "#{compusc}" != ""
 			arrayusc = Array.new
@@ -75,8 +75,8 @@ def compilazione(finestra, compingr, compusc, progr, anno)
 					arrayusc[2] = "M"
 				elsif iterusc.cm_usc == 6
 					arrayusc[2] = "F"
-				elsif iterusc.cm_usc == 20
-					arrayusc[2] = "C"
+#				elsif iterusc.cm_usc == 20
+#					arrayusc[2] = "C"
 				else
 					arrayusc[2] = "V"
 				end

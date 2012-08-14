@@ -9,11 +9,13 @@ def creastalla
 	boxcreastalla3 = Gtk::HBox.new(false, 5)
 	boxcreastalla4 = Gtk::HBox.new(false, 5)
 	boxcreastalla5 = Gtk::HBox.new(false, 5)
+	boxcreastalla6 = Gtk::HBox.new(false, 5)
 	boxcreastallav.pack_start(boxcreastalla1, false, false, 5)
 	boxcreastallav.pack_start(boxcreastalla2, false, false, 5)
 	boxcreastallav.pack_start(boxcreastalla3, false, false, 5)
 	boxcreastallav.pack_start(boxcreastalla4, false, false, 5)
 	boxcreastallav.pack_start(boxcreastalla5, false, false, 5)
+	boxcreastallav.pack_start(boxcreastalla6, false, false, 5)
 	mcreastalla.add(boxcreastallav)
 
 	#Selezione della stalla
@@ -59,10 +61,31 @@ def creastalla
 	comboragsoc.set_attributes(renderer1, :text => 1)
 	boxcreastalla2.pack_start(comboragsoc, false, false, 0)
 
+	# Selezione del detentore
+
+	labeldet = Gtk::Label.new("Seleziona un detentore:")
+	boxcreastalla3.pack_start(labeldet, false, false, 5)
+	listadet = Gtk::ListStore.new(String, Integer)
+	seldet = Detentoris.find(:all)
+	seldet.each do |d|
+		iterdet = listadet.append
+		iterdet[0] = d.detentore
+		iterdet[1] = d.id
+	end
+	combodet = Gtk::ComboBox.new(listadet)
+	renderer1 = Gtk::CellRendererText.new
+	combodet.pack_start(renderer1,false)
+	combodet.set_attributes(renderer1, :text => 0)
+	renderer1 = Gtk::CellRendererText.new
+	renderer1.visible=(false)
+	combodet.pack_start(renderer1,false)
+	combodet.set_attributes(renderer1, :text => 1)
+	boxcreastalla3.pack_start(combodet, false, false, 0)
+
 	# Selezione del proprietario
 
 	labelprop = Gtk::Label.new("Seleziona un proprietario:")
-	boxcreastalla3.pack_start(labelprop, false, false, 5)
+	boxcreastalla4.pack_start(labelprop, false, false, 5)
 	listaprop = Gtk::ListStore.new(String, Integer)
 	selprop = Props.find(:all)
 	selprop.each do |pr|
@@ -78,10 +101,10 @@ def creastalla
 	renderer1.visible=(false)
 	comboprop.pack_start(renderer1,false)
 	comboprop.set_attributes(renderer1, :text => 1)
-	boxcreastalla3.pack_start(comboprop, false, false, 0)
+	boxcreastalla4.pack_start(comboprop, false, false, 0)
 
 	labeltipoallev = Gtk::Label.new("Tipo di allevamento:")
-	boxcreastalla4.pack_start(labeltipoallev, false, false, 5)
+	boxcreastalla5.pack_start(labeltipoallev, false, false, 5)
 	tipoallev1 = Gtk::RadioButton.new("Riproduzione (BRI)")
 	tipoallev1.active=(true)
 	tipoallev="BRI"
@@ -90,68 +113,86 @@ def creastalla
 			tipoallev="BRI"
 		end
 	}
-	boxcreastalla4.pack_start(tipoallev1, false, false, 5)
+	boxcreastalla5.pack_start(tipoallev1, false, false, 5)
 	tipoallev2 = Gtk::RadioButton.new(tipoallev1, "Ingrasso (BCR)")
 	tipoallev2.signal_connect("toggled") {
 		if tipoallev2.active?
 			tipoallev="BCR"
 		end
 	}
-	boxcreastalla4.pack_start(tipoallev2, false, false, 5)
+	boxcreastalla5.pack_start(tipoallev2, false, false, 5)
 	tipoallev3 = Gtk::RadioButton.new(tipoallev1, "Stalla di sosta (SST)")
 	tipoallev3.signal_connect("toggled") {
 		if tipoallev3.active?
 			tipoallev="SST"
 		end
 	}
-	boxcreastalla4.pack_start(tipoallev3, false, false, 5)
+	boxcreastalla5.pack_start(tipoallev3, false, false, 5)
 	bottcreastalla = Gtk::Button.new( "Crea la stalla" )
-	boxcreastalla5.pack_start(bottcreastalla, false, false, 5)
+	boxcreastalla6.pack_start(bottcreastalla, false, false, 5)
 	bottcreastalla.signal_connect("clicked") {
 #		puts comboragsoc.active_iter[0]
 #		puts comboragsoc.active_iter[2]
 #		puts combo317.active_iter[0]
-		if combo317.active == -1 or comboragsoc.active == -1 or comboprop.active == -1
+		if combo317.active == -1 or comboragsoc.active == -1 or combodet.active == -1 or comboprop.active == -1
 			Errore.avviso(mcreastalla, "Mancano dei dati.")
 		else
-			cont = Relazs.find(:all, :conditions => ["stalle_id= ? and ragsoc_id= ?", "#{combo317.active_iter[1]}", "#{comboragsoc.active_iter[1]}"])
-			if cont.length == 0
-				Contatoris.create(:mod4usc => "0/#{@giorno.strftime("%y")}", :pagregcar => "0/#{@giorno.strftime("%y")}", :pagregscar => "0/#{@giorno.strftime("%y")}", :pagreg => "0/#{@giorno.strftime("%y")}", :progreg => "0/#{@giorno.strftime("%y")}")
-				ultimocont = Contatoris.find(:last)
-				Relazs.create(:stalle_id => "#{combo317.active_iter[1]}", :ragsoc_id => "#{comboragsoc.active_iter[1]}", :contatori_id => "#{ultimocont.id}", :prop_id => "#{comboprop.active_iter[1]}", :atp => "#{tipoallev}")
+			controllo = Relazs.find(:all, :conditions => ["stalle_id= ? and ragsoc_id= ? and detentori_id = ? and prop_id = ? and atp = ?", "#{combo317.active_iter[1]}", "#{comboragsoc.active_iter[1]}", "#{combodet.active_iter[1]}", "#{comboprop.active_iter[1]}", "#{tipoallev}"])
+			#puts controllo.inspect
+			if controllo.length == 0
+				#puts "Niente"
+				Relazs.create(:stalle_id => "#{combo317.active_iter[1]}", :ragsoc_id => "#{comboragsoc.active_iter[1]}", :detentori_id => "#{combodet.active_iter[1]}", :prop_id => "#{comboprop.active_iter[1]}", :atp => "#{tipoallev}", :mod4usc => "0/#{@giorno.strftime("%y")}", :progreg => "0/#{@giorno.strftime("%y")}", :ultimoreg => "0")
 				allev = Allevamentis.find(:all, :conditions => ["ragsoc= ? and idfisc= ? and cod317= ?", "#{comboragsoc.active_iter[0]}", "#{comboragsoc.active_iter[2]}", "#{combo317.active_iter[0]}"])
 #				puts allev.length
 				if allev.length == 0
 					Allevamentis.create(:ragsoc => "#{comboragsoc.active_iter[0]}", :idfisc => "#{comboragsoc.active_iter[2]}", :cod317 => "#{combo317.active_iter[0]}")
 #					puts "bau"
 				end
-			Conferma.conferma(mcreastalla, "Dati inseriti correttamente")
+				Conferma.conferma(mcreastalla, "Dati inseriti correttamente")
 			else
-				n = cont.length
-				n -=1
-				esiste = 0
-				while n >= 0
-					if cont[n].prop_id == comboprop.active_iter[1] and cont[n].atp == tipoallev
-						esiste = 1
-						break
-					else
-					end
-					n -=1
-				end
-				if esiste == 0
-					ultimocont = Contatoris.find(:last)
-					Relazs.create(:stalle_id => "#{combo317.active_iter[1]}", :ragsoc_id => "#{comboragsoc.active_iter[1]}", :contatori_id => "#{cont[0].contatori_id}", :prop_id => "#{comboprop.active_iter[1]}", :atp => "#{tipoallev}")
-					Conferma.conferma(mcreastalla, "Dati inseriti correttamente")
-				else
-					Conferma.conferma(mcreastalla, "Il profilo è già presente")
-				end
+				#puts "Già presente"
+				Conferma.conferma(mcreastalla, "Il profilo è già presente")
 			end
+
+
+#			cont = Relazs.find(:all, :conditions => ["stalle_id= ? and ragsoc_id= ?", "#{combo317.active_iter[1]}", "#{comboragsoc.active_iter[1]}"])
+#			if cont.length == 0
+#				Contatoris.create(:mod4usc => "0/#{@giorno.strftime("%y")}", :pagregcar => "0/#{@giorno.strftime("%y")}", :pagregscar => "0/#{@giorno.strftime("%y")}", :pagreg => "0/#{@giorno.strftime("%y")}", :progreg => "0/#{@giorno.strftime("%y")}")
+#				ultimocont = Contatoris.find(:last)
+#				Relazs.create(:stalle_id => "#{combo317.active_iter[1]}", :ragsoc_id => "#{comboragsoc.active_iter[1]}", :contatori_id => "#{ultimocont.id}", :prop_id => "#{comboprop.active_iter[1]}", :atp => "#{tipoallev}")
+#				allev = Allevamentis.find(:all, :conditions => ["ragsoc= ? and idfisc= ? and cod317= ?", "#{comboragsoc.active_iter[0]}", "#{comboragsoc.active_iter[2]}", "#{combo317.active_iter[0]}"])
+##				puts allev.length
+#				if allev.length == 0
+#					Allevamentis.create(:ragsoc => "#{comboragsoc.active_iter[0]}", :idfisc => "#{comboragsoc.active_iter[2]}", :cod317 => "#{combo317.active_iter[0]}")
+##					puts "bau"
+#				end
+#			Conferma.conferma(mcreastalla, "Dati inseriti correttamente")
+#			else
+#				n = cont.length
+#				n -=1
+#				esiste = 0
+#				while n >= 0
+#					if cont[n].prop_id == comboprop.active_iter[1] and cont[n].atp == tipoallev
+#						esiste = 1
+#						break
+#					else
+#					end
+#					n -=1
+#				end
+				#if esiste == 0
+#					ultimocont = Contatoris.find(:last)
+#					Relazs.create(:stalle_id => "#{combo317.active_iter[1]}", :ragsoc_id => "#{comboragsoc.active_iter[1]}", :contatori_id => "#{cont[0].contatori_id}", :prop_id => "#{comboprop.active_iter[1]}", :atp => "#{tipoallev}")
+#					Conferma.conferma(mcreastalla, "Dati inseriti correttamente")
+#				else
+#					Conferma.conferma(mcreastalla, "Il profilo è già presente")
+#				end
+#			end
 		end
 	}
 	bottchiudi = Gtk::Button.new( "Chiudi" )
 	bottchiudi.signal_connect("clicked") {
 		mcreastalla.destroy
 	}
-	boxcreastalla5.pack_start(bottchiudi, false, false, 0)
+	boxcreastalla6.pack_start(bottchiudi, false, false, 0)
 	mcreastalla.show_all
 end

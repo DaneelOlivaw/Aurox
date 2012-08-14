@@ -1,4 +1,6 @@
-def registronuovo(mstamparegistro)
+def registronuovo(window)
+	#rimanenze = Registros.count(:all, :conditions => ["contatori_id= ? and stampascarico= ? and tipouscita != ?", "#{@stallaoper.contatori_id}", "0", "null"], :order => ["dataingresso, id"])
+	rimanenze = Registros.count(:all, :conditions => ["relaz_id= ? and tipouscita IS NULL", "#{@stallaoper.id}"])
 	fogliousc = PDF::Writer.new(:paper => "A4", :orientation => :landscape) # , :font_size => 5)
 	fogliousc.margins_mm(20, 6, 12)
 	fogliousc.select_font("Helvetica")
@@ -10,7 +12,7 @@ def registronuovo(mstamparegistro)
 		y = fogliousc.absolute_bottom_margin
 		z = fogliousc.absolute_left_margin
 		w = fogliousc.absolute_right_margin
-		testo = "Stampato in data #{@giorno.strftime("%d/%m/%Y")}"
+		testo = "Stampato in data #{@giorno.strftime("%d/%m/%Y")} - rimanenze: #{rimanenze}"
 		boh = fogliousc.text_width(testo, dimcar) #/ 2.0
 		q = fogliousc.absolute_bottom_margin + (dimcar * 1.01)
 		m = w - boh
@@ -90,7 +92,7 @@ def registronuovo(mstamparegistro)
 	}
 	data = Array.new
 	#contid = Relazs.find(:first, :conditions => "id = '#{@stallaoper}'")
-	selcapi = Registros.find(:all, :conditions => ["contatori_id= ? and stampascarico= ? and tipouscita != ?", "#{@stallaoper.contatori_id}", "0", "null"], :order => ["dataingresso, id"])
+	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and stampascarico= ? and tipouscita != ?", "#{@stallaoper.id}", "0", "null"], :order => ["dataingresso, id"])
 	selcapi.each do |i, index|
 		if i.tipouscita == "V" or i.tipouscita == "C"
 			mod4 = i.mod4usc.split("/")
@@ -120,25 +122,25 @@ def registronuovo(mstamparegistro)
 			@shell.ShellExecute('.\registro\registro_uscita.pdf', '', '', 'open', 3)
 		end
 
-		avviso = Gtk::MessageDialog.new(@mstamparegistro, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "La stampa è stata eseguita correttamente?")
+		avviso = Gtk::MessageDialog.new(window, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "La stampa è stata eseguita correttamente?")
 		risposta = avviso.run
 		avviso.destroy
 		if risposta == Gtk::Dialog::RESPONSE_YES
-			avviso2 = Gtk::MessageDialog.new(@mstamparegistro, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Aggiorno il registro?")
+			avviso2 = Gtk::MessageDialog.new(window, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Aggiorno il registro?")
 			risposta2 = avviso2.run
 			avviso2.destroy
 			if risposta2 == Gtk::Dialog::RESPONSE_YES
 				selcapi.each do |d|
 					Registros.update(d.id, { :stampascarico => "1"})
 				end
-				Conferma.conferma(mstamparegistro, "Il registro è stato aggiornato.")
+				Conferma.conferma(window, "Il registro è stato aggiornato.")
 			else
-				Conferma.conferma(mstamparegistro, "Il registro non è stato aggiornato.")
+				Conferma.conferma(window, "Il registro non è stato aggiornato.")
 			end
 		else
-			Conferma.conferma(mstamparegistro, "Si dovrà rilanciare la stampa.")
+			Conferma.conferma(window, "Si dovrà rilanciare la stampa.")
 		end
 	else
-		Conferma.conferma(mstamparegistro, "Non ci sono dati da stampare.")
+		Conferma.conferma(window, "Non ci sono dati da stampare.")
 	end
 end

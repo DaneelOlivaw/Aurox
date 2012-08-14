@@ -423,7 +423,7 @@ def creafile(finestra)
 			Dir.foreach("#{@dir}/invio") do |f|
 				#puts @giorno -7.days
 				#puts File.ctime("#{@dir}/invio/#{f}") if File.ctime("#{@dir}/invio/#{f}") < @giorno -7.days
-				File.delete("#{@dir}/invio/#{f}") if f.include?(".asc")
+				File.delete("#{@dir}/invio/#{f}") if f.include?(".asc") and File.ctime("#{@dir}/invio/#{f}") < @giorno -7.days
 			end
 			File.copy("#{@dir}/file/#{nomefile}", "#{@dir}/invio")
 #		else
