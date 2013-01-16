@@ -596,10 +596,10 @@ def modificacapousc(selcapo)
 			elsif marca.text[0,2].upcase == "IT" and marca.text.length < 14
 				Errore.avviso(modcapousc, "Marca corta.")
 				errore = 1
-			elsif nascita.text.to_i == 0
+			elsif nascita.text.to_i == 0 or nascita.text.length < 6
 				Errore.avviso(modcapousc, "Data di nascita errata.")
 				errore = 1
-			elsif datausc.text.to_i == 0
+			elsif datausc.text.to_i == 0 or datausc.text.length < 6
 				Errore.avviso(modcapousc, "Data di uscita errata.")
 				errore = 1
 			elsif marcatura.text != "" and marcatura.text.to_i == 0
@@ -689,12 +689,19 @@ def modificacapousc(selcapo)
 
 # Bottone di eliminazione del movimento
 
-	bottelimina = Gtk::Button.new( "Elimina capo" )
+	bottelimina = Gtk::Button.new( "Elimina movimento" )
 	bottelimina.signal_connect("clicked") {
 		avviso = Gtk::MessageDialog.new(modcapousc, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Elimino il movimento di uscita del capo #{capomod[3]} ?")
 		risposta = avviso.run
 		avviso.destroy
 		if risposta == Gtk::Dialog::RESPONSE_YES
+			if capomod[45] == "SI"
+				capodelreg = Registros.find(:first, :conditions => "relaz_id='#{@stallaoper.id}' and marca='#{capomod[3]}' and datauscita='#{capomod[29][6,4]}-#{capomod[29][3,2]}-#{capomod[29][0,2]}'")
+				#puts capodelreg.inspect
+				#puts capodelreg.id
+				capomodregid = capodelreg.id
+				Registros.update(capomodregid, {:tipouscita => nil, :datauscita => nil, :destinazione => nil, :mod4usc => nil, :certsanusc => nil, :stampascarico => "0"})
+			end
 			Animals.delete(capomod[0])
 			ingrcapo = Animals.find(:last, :conditions => "relaz_id='#{@stallaoper.id}' and tipo='I' and marca = '#{capomod[3]}' and uscito = '1'")
 			Animals.update(ingrcapo.id, {:uscito => "0"})

@@ -57,10 +57,10 @@ def createMenuBar(finestra, listacombo, combo, combo2, combodet, combo3)
 	modifica = Gtk::MenuItem.new( "Modifica" )
 	menumod = Gtk::Menu.new
 	itemmod = Gtk::MenuItem.new( "Allevamenti" )
-	itemmod.signal_connect("activate") { modallevamenti }
+	itemmod.signal_connect("activate") { modallevamenti(nil) }
 	menumod.append( itemmod )
 	itemmod = Gtk::MenuItem.new( "Macelli" )
-	itemmod.signal_connect("activate") {modmacelli}
+	itemmod.signal_connect("activate") {modmacelli(nil)}
 	menumod.append( itemmod )
 	itemmod = Gtk::MenuItem.new( "Trasportatori" )
 	itemmod.signal_connect("activate") {modtrasportatori}
@@ -172,12 +172,23 @@ def createMenuBar(finestra, listacombo, combo, combo2, combodet, combo3)
 		end
 	}
 	menustampe.append(itemstampe)
-	itemstampe = Gtk::MenuItem.new("Allegato MOD. 4")
+	itemstampe = Gtk::MenuItem.new("Modello 4 e allegato")
 	itemstampe.signal_connect("activate") {
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(finestra, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
 			mascallmod4
+		end
+	}
+	menustampe.append(itemstampe)
+	itemstampe = Gtk::MenuItem.new("Ristampa pagine vidimate")
+	itemstampe.signal_connect("activate") {
+		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
+			Errore.avviso(finestra, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
+		else
+			#puts "Stampa pagine vidimate"
+			require 'ristampavidimati'
+			ristampavidimati
 		end
 	}
 	menustampe.append(itemstampe)

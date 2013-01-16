@@ -40,10 +40,12 @@ def mascvidimati
 #	end
 	#npagr = 0
 	#progreg = 25
+	labelreg = Gtk::Label.new("Registro aziendale numero: #{@stallaoper.ultimoreg+1}")
+	boxvidim1.pack_start(labelreg, false, false, 5)
 	labelnpagine = Gtk::Label.new("Numero pagine da stampare:")
-	boxvidim1.pack_start(labelnpagine, false, false, 5)
-	npagine = Gtk::Entry.new()
-	boxvidim1.pack_start(npagine, false, false, 5)
+	boxvidim2.pack_start(labelnpagine, false, false, 5)
+	npagine = Gtk::Entry.new
+	boxvidim2.pack_start(npagine, false, false, 5)
 #	labelultimo = Gtk::Label.new("Ultimo numero stampato:")
 #	boxvidim3.pack_start(labelultimo, false, false, 5)
 #	nultimo = Gtk::Entry.new()
@@ -80,8 +82,8 @@ def mascvidimati
 	stampavidim = Gtk::Button.new( "STAMPA" )
 	boxvidim4.pack_start(stampavidim, true, false, 5)
 	stampavidim.signal_connect("clicked") {
-		if npagine.text == "" #or nultimo.text == ""
-			Errore.avviso(mvidimati, "Mancano dei dati.")
+		if npagine.text.to_i == 0 #or nultimo.text == ""
+			Errore.avviso(mvidimati, "Mancano dei dati o sono stati inseriti non correttamente.")
 		else
 #			if tiporeg == "S"
 #				orientation = :landscape
@@ -97,7 +99,7 @@ def mascvidimati
 			registro.select_font("Helvetica")
 			registro.margins_mm(7, 10)
 			#prog = npagr #nultimo.text.split('/')
-			prpagina = 1 #prog[0].to_i
+			#prpagina = 1 #prog[0].to_i
 			#prpagina += 1
 			registro.open_object do |testa|
 				registro.save_state
@@ -132,16 +134,20 @@ def mascvidimati
 				boh = registro.text_width(testopag, dimcar) / 2.0
 				#q = registro.absolute_bottom_margin + (dimcar * 1.01)
 				m = w - boh
-				registro.start_page_numbering(m, y, 8, nil, testopag, prpagina)
+				#registro.start_page_numbering(m, y, 8, nil, testopag, prpagina)
+				registro.start_page_numbering(m, y, 8, nil, testopag, 1)
 				registro.restore_state
 				registro.close_object
 				registro.add_object(testa, :all_pages)
-				cont = npagine.text.to_i
-				cont -= 1
-				while cont != 0
+				#cont = npagine.text.to_i
+				(2..npagine.text.to_i).each do
 					registro.start_new_page
-					cont -= 1
 				end
+#				cont -= 1
+#				while cont != 0
+#					registro.start_new_page
+#					cont -= 1
+#				end
 			end
 #		if File.exist?('./vidim/vidimati_ingresso.pdf')
 #			puts "sì"

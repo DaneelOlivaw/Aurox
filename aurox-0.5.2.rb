@@ -72,6 +72,7 @@ Gtk.init
 	box1.pack_start(boxprop, false, false, 5)
 	window.add(box1)
 	ingressi = Gtk::Button.new( "INGRESSI" )
+	ingressi2 = Gtk::Button.new( "INGRESSI NUOVO SISTEMA" )
 	uscite = Gtk::Button.new( "USCITE" )
 	bottcreafile = Gtk::Button.new("CREA FILE PER L'INVIO DEI DATI")
 	stampareg = Gtk::Button.new("STAMPA REGISTRO")
@@ -266,6 +267,7 @@ Gtk.init
 		if combo3.active != -1
 			@stallaoper = Relazs.find(:first, :conditions => ["id= ?", "#{combo3.active_iter[0]}"])
 			#puts @stallaoper.inspect
+			#puts @stallaoper.class
 			if @stallaoper.progreg.split('/')[1] < @giorno.strftime("%y")
 				#testo = Pango.parse_markup("<span weight ='bold'>Attenzione: è cambiato l'anno rispetto ai riferimenti in memoria. Per evitare problemi si prega di concludere la movimentazione dei capi dell'anno precedente e di fare le relative stampe PRIMA di inserire i dati dell'anno corrente.</span>")
 				#testo = "Attenzione: è cambiato l\'anno rispetto ai riferimenti in memoria. Per evitare problemi si prega di concludere la movimentazione dei capi dell\'anno precedente e di fare le relative stampe PRIMA di inserire i dati dell\'anno corrente."
@@ -283,7 +285,16 @@ Gtk.init
 			masccontaingr
 		end
 	}
-
+	ingressi2.signal_connect( "clicked" ) {
+		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
+			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
+		else
+			#puts "Nuovo sistema ingressi"
+			require 'containgressi2'
+			masccontaingr2
+			#masccontaingr
+		end
+	}
 	uscite.signal_connect( "clicked" ) {
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
@@ -348,6 +359,7 @@ Gtk.init
 		end
 	}
 	box1.pack_start(ingressi, false, false, 0)
+	box1.pack_start(ingressi2, false, false, 0)
 	box1.pack_start(uscite, false, false, 0)
 	box1.pack_start(bottcreafile, false, false, 5)
 	box1.pack_start(bottcompilaregistro, false, false, 5)

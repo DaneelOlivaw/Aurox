@@ -92,20 +92,24 @@ def registronv(comboanno)
 		col.width = 76 #80
 	}
 	tabellausc.columns["mod4"] = PDF::SimpleTable::Column.new("mod4") { |col|
-		col.heading = "Mod. 4"
+		col.heading = "Mod. 4 / Cert. san."
 		col.width = 50 #35
 	}
 	data = Array.new
 	#rel = Relazs.find(:first, :conditions => "id = '#{@stallaoper}'")
 	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and tipouscita != 'null' and YEAR(datauscita) = ?", "#{@stallaoper.id}", "#{comboanno.active_iter[0]}"], :order => ["dataingresso, id"])
 	selcapi.each do |i, index|
-		if i.tipouscita == "V" or i.tipouscita == "C"
+		if (i.tipouscita == "V" or i.tipouscita == "C") and i.mod4usc.to_s != ""
 			mod4 = i.mod4usc.split("/")
 			mod4anno = mod4[1]
 			mod4num = mod4[2]
 			mod4pul = mod4num + "/" + mod4anno.to_s[2,2]
 		else
-			mod4pul = i.certsanusc
+			if i.certsanusc.split(".").length == 4
+				mod4pul = i.certsanusc.split(".")[3].to_s
+			else
+				mod4pul = i.certsanusc
+			end
 		end
 		if i.destinazione.length > 18
 			destinazione = i.destinazione[0..16] + "..."

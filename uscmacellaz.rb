@@ -102,7 +102,7 @@ def datimacellazione(finestra, muscite, listasel, combousc)
 	labeltrasp = Gtk::Label.new("Nome trasportatore:")
 	boxusc6.pack_start(labeltrasp, false, false, 5)
 	listatrasp = Gtk::ListStore.new(Integer, String)
-	seltrasp = Trasportatoris.find(:all)
+	seltrasp = Trasportatoris.find(:all, :order => "nometrasp")
 	seltrasp.each do |trasp|
 		itertrasp = listatrasp.append
 		itertrasp[0] = trasp.id

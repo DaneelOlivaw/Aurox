@@ -3,6 +3,13 @@
 def compilaregistro(finestra)
 	#contid = @stallaoper.contatori.id
 	nprog = @stallaoper.progreg.split('/')
+	nultimo = Registros.find(:last, :conditions => ["relaz_id = ?", "#{@stallaoper.id}"])
+	unless nultimo.nil?
+		# Tentativo di correzione del progressivo in caso di crash del programma mentre è in atto la procedura di compilazione
+		if nprog != nultimo.progressivo.split('/')
+			nprog = nultimo.progressivo.split('/')
+		end
+	end
 	#anno = "#{@giorno.strftime("%y")[0,2]} + #{nprog[1]}".to_i
 	anno = Time.parse("#{nprog[1]}").strftime("%Y")[0,2] + nprog[1]
 	#puts anno
@@ -13,7 +20,7 @@ def compilaregistro(finestra)
 		risposta = avviso.run
 		avviso.destroy
 		if risposta == Gtk::Dialog::RESPONSE_YES
-			compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"])
+			compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{anno}"], :order => ["data_ingr, id"])
 			compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"])
 			#puts compingr.length
 			#puts compusc.length
@@ -23,12 +30,12 @@ def compilaregistro(finestra)
 		end
 	elsif anno.to_i < @giorno.strftime("%Y").to_i and Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(data_ingr)= ?", "#{@stallaoper.id}", "I", "0", "#{@giorno.strftime("%Y")}"]).length != 0 or Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{@giorno.strftime("%Y")}"]).length != 0
 		#puts "seconda condizione"
-		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"])
+		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr, id"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])
 		compilazione(finestra, compingr, compusc, 0, @giorno.strftime("%y"))
 	elsif anno.to_i == @giorno.strftime("%Y").to_i
 		#puts "terza condizione"
-		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"])
+		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr, id"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])
 		compilazione(finestra, compingr, compusc, nprog[0].to_i, nprog[1].to_i)
 	end

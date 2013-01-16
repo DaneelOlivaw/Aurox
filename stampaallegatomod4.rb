@@ -1,5 +1,5 @@
 def mascallmod4
-	mallmod4 = Gtk::Window.new("Stampa dell'allegato al Modello 4")
+	mallmod4 = Gtk::Window.new("Stampa Modello 4 e allegato")
 	mallmod4.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxallmod4v = Gtk::VBox.new(false, 0)
 	boxallmod41 = Gtk::HBox.new(false, 5)
@@ -29,6 +29,18 @@ def mascallmod4
 	boxallmod42.pack_start(labelanno, false, false, 5)
 	boxallmod42.pack_start(comboanno, false, false, 0)
 
+	stampamod4 = Gtk::Button.new("Stampa mod4")
+	boxallmod43.pack_start(stampamod4, false, false, 5)
+	stampamod4.signal_connect("clicked") {
+		capi = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and mod4= ?", "#{@stallaoper.id}", "U", "#{@stallaoper.stalle.cod317}/#{comboanno.active_iter[0]}/#{m4.text}"])
+		if capi.length == 0
+			Errore.avviso(mallmod4, "Questo modello 4 non esiste.") #.avvia
+		else
+			require 'stampamod4'
+			stampamod4(m4.text, comboanno.active_iter[0], mallmod4)
+		end
+	}
+
 	stampa = Gtk::Button.new("Stampa l'allegato")
 	boxallmod43.pack_start(stampa, false, false, 5)
 	stampa.signal_connect("clicked") {
@@ -39,6 +51,7 @@ def mascallmod4
 			stampaallegato(m4, comboanno.active_iter[0], capi)
 		end
 	}
+
 	bottchiudi = Gtk::Button.new( "Chiudi" )
 	bottchiudi.signal_connect("clicked") {
 		mallmod4.destroy

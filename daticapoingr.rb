@@ -31,6 +31,13 @@ def inscapo
 	bottaltricod.signal_connect("clicked") {
 		insaltricod(finestraingr)
 	}
+	bottaltricod = Gtk::Button.new("Codice a barre italiano")
+	boxingr1.pack_start(bottaltricod, true, false, 0)
+
+	bottaltricod.signal_connect("clicked") {
+		require 'codbarreita'
+		codbarreita(finestraingr)
+	}
 	errore = 0
 	labelingr = Gtk::Label.new("Totale capi da inserire: #{@containgressi}")
 	boxingr1.pack_start(labelingr, true, false, 0)
@@ -111,6 +118,7 @@ def inscapo
 		iter = listar.append
 		iter[0] = r.razza
 		iter[1] = r.id
+		#iter[2] = r.cod_razza
 		controllo.merge!("#{r.id}" => r.razza)
 	end
 
@@ -167,13 +175,13 @@ def inscapo
 		end
 	}
 	boxingr5.pack_start(@sesso1, false, false, 5)
-	sesso2 = Gtk::RadioButton.new(@sesso1, "F")
-	sesso2.signal_connect("toggled") {
-		if sesso2.active?
+	@sesso2 = Gtk::RadioButton.new(@sesso1, "F")
+	@sesso2.signal_connect("toggled") {
+		if @sesso2.active?
 			@valsesso="F"
 		end
 	}
-	boxingr5.pack_start(sesso2, false, false, 5)
+	boxingr5.pack_start(@sesso2, false, false, 5)
 
 	#Nazione origine
 
@@ -466,7 +474,7 @@ def inscapo
 		Errore.avviso(finestraingr, "Marca corta.")
 		#puts "marca corta"
 		errore = 1
-	elsif @nascita.text.to_i == 0
+	elsif @nascita.text.to_i == 0 or @nascita.text.length < 6
 		Errore.avviso(finestraingr, "Data di nascita errata.")
 		errore = 1
 		#puts "data nascita"
@@ -569,7 +577,7 @@ def inscapo
 					elsif @marca.text[0,2].upcase == "IT" and @marca.text.length < 14
 						Errore.avviso(finestraingr, "Marca corta.")
 						errore = 1
-					elsif @nascita.text.to_i == 0
+					elsif @nascita.text.to_i == 0 or @nascita.text.length < 6
 						Errore.avviso(finestraingr, "Data di nascita errata.")
 						errore = 1
 					elsif Time.parse("#{@datanasingl}") > @giorno
@@ -721,7 +729,7 @@ def inscapo
 					elsif @marca.text[0,2].upcase == "IT" and @marca.text.length < 14
 						Errore.avviso(finestraingr, "Marca corta.")
 						errore = 1
-					elsif @nascita.text.to_i == 0
+					elsif @nascita.text.to_i == 0 or @nascita.text.length < 6
 						Errore.avviso(finestraingr, "Data di nascita errata.")
 						errore = 1
 					elsif Time.parse("#{@datanasingl}") > @giorno

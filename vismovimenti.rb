@@ -142,30 +142,31 @@ def vismovimenti
 #	@relid = @combo3.active_iter[0]
 	visingressi.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "I"], :order => ["data_ingr"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "I"], :order => ["data_ingr, id"])
 		riempimento(selmov, lista, labelconto)		
 	}
 	visuscite.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "U"], :order => ["uscita"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ?", "#{@stallaoper.id}", "U"], :order => ["uscita, id"])
 		riempimento(selmov, lista, labelconto)
 	}
 	vispresenti.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and uscito= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and uscito= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr, id"])
 		riempimento(selmov, lista, labelconto)
 	}
 	vistutti.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ?", "#{@stallaoper.id}"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ?", "#{@stallaoper.id}"], :order => ["data_ingr, id"])
 		riempimento(selmov, lista, labelconto)
 	}
 	visricerca.signal_connect("clicked") {
 		lista.clear
-		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and marca LIKE ?", "#{@stallaoper.id}", "%#{visricercaentry.text}%"])
+		selmov = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and marca LIKE ?", "#{@stallaoper.id}", "%#{visricercaentry.text}%"], :order => ["data_ingr, id"])
 		riempimento(selmov, lista, labelconto)
 	}
 		cella = Gtk::CellRendererText.new
+		#colonna0 = Gtk::TreeViewColumn.new("ID", cella)
 		colonna1 = Gtk::TreeViewColumn.new("Tipo movimento", cella)
 		colonna1.resizable = true
 		colonna2 = Gtk::TreeViewColumn.new("Ragione sociale", cella)
@@ -212,6 +213,7 @@ def vismovimenti
 		colonna41 = Gtk::TreeViewColumn.new("Marca sostitutiva", cella)
 		colonna42 = Gtk::TreeViewColumn.new("Ditta raccoglitrice", cella)
 		colonna43 = Gtk::TreeViewColumn.new("Registro", cella)
+		#colonna0.set_attributes(cella, :text => 0)
 		colonna1.set_attributes(cella, :text => 1)
 		colonna2.set_attributes(cella, :text => 2)
 		colonna3.set_attributes(cella, :text => 3)
@@ -255,6 +257,7 @@ def vismovimenti
 		colonna41.set_attributes(cella, :text => 41)
 		colonna42.set_attributes(cella, :text => 42)
 		colonna43.set_attributes(cella, :text => 45)
+		#vista.append_column(colonna0)
 		vista.append_column(colonna1)
 		vista.append_column(colonna2)
 		vista.append_column(colonna3)

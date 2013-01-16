@@ -85,6 +85,8 @@ def compilazione(finestra, compingr, compusc, progr, anno)
 					arrayusc[4] = ""
 				elsif iterusc.cm_usc == 9
 					arrayusc[4] = iterusc.macelli.nomemac
+				elsif iterusc.cm_usc == 16
+					arrayusc[4] = iterusc.naz_dest
 				else
 					arrayusc[4] = iterusc.allevamenti.cod317
 				end

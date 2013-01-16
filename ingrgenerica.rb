@@ -195,13 +195,13 @@ def mascingressi(finestraingr, labelingr)
 			errore = 0
 			@dataingingl = @dataing.text[4,2] + @dataing.text[2,2] + @dataing.text[0,2]
 			@dataingingl = Time.parse("#{@dataingingl}").strftime("%Y")[0,2] + @dataingingl
-			if @dataing.text.to_i == 0 #and 
+			if @dataing.text.to_i == 0 or @dataing.text.length < 6
 				Errore.avviso(mingressi, "Data di ingresso sbagliata.")
 				errore = 1
 			elsif Time.parse("#{@dataingingl}") < Time.parse("#{@datanasingl}")
 				Errore.avviso(mingressi, "La data di ingresso non può essere inferiore alla data di nascita.")
 				errore = 1
-			elsif @datamod4.text.to_i == 0 #@datamod4.text != "" and @datamod4.text.to_i == 0 or @datamod4.text == "" #and @datamod4.text.to_i != 0
+			elsif @datamod4.text.to_i == 0 or @datamod4.text.length < 6 #@datamod4.text != "" and @datamod4.text.to_i == 0 or @datamod4.text == "" #and @datamod4.text.to_i != 0
 				Errore.avviso(mingressi, "Data mod.4 sbagliata.")
 				errore = 1
 			elsif @datamod4.text != "" and @datamod4.text.to_i != 0
@@ -224,6 +224,7 @@ def mascingressi(finestraingr, labelingr)
 			Errore.avviso(mingressi, "Controllare le date.")
 		end
 		if errore == 0
+			puts @dataingingl
 			@depositoingr["dataingr"] = @dataingingl.to_i
 			@depositoingr["idallprov"] = @idallprov
 			@depositoingr["nazprov"] = @combonazprov.active_iter[2]
@@ -233,7 +234,7 @@ def mascingressi(finestraingr, labelingr)
 			@depositoingr["rifloc"] = @rifloc.text.upcase
 
 #			Animals.create(:relaz_id => "#{@stallaoper.to_i}", :tipo => "I", :cm_ing => "#{@comboing.active_iter[0]}", :marca => "#{@marca.text.upcase}", :specie=> "#{@valspecie}", :razza_id => "#{@comborazze.active_iter[0]}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{@stallanas.text.upcase}", :sesso => "#{@valsesso}", :naz_orig => "#{@combonazorig.active_iter[2]}", :naz_nasprimimp => "#{@combonaznas.active_iter[2]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{@valgen}", :embryo => "#{@valembryo}", :marca_prec => "#{@prec.text.upcase}", :marca_madre => "#{@madre.text.upcase}", :marca_padre => "#{@padre.text.upcase}", :donatrice => "#{@don.text.upcase}", :clg => "#{@libgen.text.upcase}", :data_ingr => "#{@dataingingl.to_i}", :allevamenti_id => "#{@idallprov}", :naz_prov => "#{@combonazprov.active_iter[2]}", :mod4 => "#{@comboallprov.active_iter[3] + "/" + @giorno.strftime("%Y") + "/" + @mod4.text}", :data_mod4 => "#{@datamod4ingl.to_i}", :certsan => "#{@testocertsan.text.upcase}", :rifloc => "#{@rifloc.text.upcase}")
-			Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "I", :cm_ing => "#{@comboing.active_iter[0]}", :marca => "#{@marca.text.upcase}", :specie=> "#{@valspecie}", :razza_id => "#{@razzaid}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{@stallanas.text.upcase}", :sesso => "#{@valsesso}", :naz_orig => "#{@combonazorig.active_iter[2]}", :naz_nasprimimp => "#{@combonaznas.active_iter[2]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{@valgen}", :embryo => "#{@valembryo}", :marca_prec => "#{@prec.text.upcase}", :marca_madre => "#{@madre.text.upcase}", :marca_padre => "#{@padre.text.upcase}", :donatrice => "#{@don.text.upcase}", :clg => "#{@libgen.text.upcase}", :data_ingr => "#{@dataingingl.to_i}", :allevamenti_id => "#{@idallprov}", :naz_prov => "#{@combonazprov.active_iter[2]}", :mod4 => "#{@comboallprov.active_iter[3] + "/" + Time.parse("#{@datamod4ingl}").strftime("%Y") + "/" + @mod4.text}", :data_mod4 => "#{@datamod4ingl.to_i}", :certsan => "#{@testocertsan.text.upcase}", :rifloc => "#{@rifloc.text.upcase}")
+			#Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "I", :cm_ing => "#{@comboing.active_iter[0]}", :marca => "#{@marca.text.upcase}", :specie=> "#{@valspecie}", :razza_id => "#{@razzaid}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{@stallanas.text.upcase}", :sesso => "#{@valsesso}", :naz_orig => "#{@combonazorig.active_iter[2]}", :naz_nasprimimp => "#{@combonaznas.active_iter[2]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{@valgen}", :embryo => "#{@valembryo}", :marca_prec => "#{@prec.text.upcase}", :marca_madre => "#{@madre.text.upcase}", :marca_padre => "#{@padre.text.upcase}", :donatrice => "#{@don.text.upcase}", :clg => "#{@libgen.text.upcase}", :data_ingr => "#{@dataingingl.to_i}", :allevamenti_id => "#{@idallprov}", :naz_prov => "#{@combonazprov.active_iter[2]}", :mod4 => "#{@comboallprov.active_iter[3] + "/" + Time.parse("#{@datamod4ingl}").strftime("%Y") + "/" + @mod4.text}", :data_mod4 => "#{@datamod4ingl.to_i}", :certsan => "#{@testocertsan.text.upcase}", :rifloc => "#{@rifloc.text.upcase}")
 			@containgressi -=1
 			labelingr.text = ("Totale capi da inserire: #{@containgressi}")
 			#@comborazze.active = -1
@@ -252,8 +253,8 @@ def mascingressi(finestraingr, labelingr)
 			@marca.text = ""
 			@primocapo = 1
 			Conferma.conferma(mingressi, "Capo inserito correttamente.")
-			mingressi.destroy
-			finestraingr.present
+			#mingressi.destroy
+			#finestraingr.present
 		else
 		end
 	}

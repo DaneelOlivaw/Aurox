@@ -592,10 +592,10 @@ def modificacapo(selcapo)
 			elsif marca.text[0,2].upcase == "IT" and marca.text.length < 14
 				Errore.avviso(modcapo, "Marca corta.")
 				errore = 1
-			elsif nascita.text.to_i == 0
+			elsif nascita.text.to_i == 0 or nascita.text.length < 6
 				Errore.avviso(modcapo, "Data di nascita errata.")
 				errore = 1
-			elsif dataingr.text.to_i == 0
+			elsif dataingr.text.to_i == 0 or dataingr.text.length < 6
 				Errore.avviso(modcapo, "Data di ingresso errata.")
 				errore = 1
 			elsif marcatura.text != "" and marcatura.text.to_i == 0
@@ -679,6 +679,10 @@ def modificacapo(selcapo)
 			risposta = avviso.run
 			avviso.destroy
 			if risposta == Gtk::Dialog::RESPONSE_YES
+				if capomod[45] == "SI"
+					capocancreg = Registros.find(:first, :conditions => ["relaz_id= ? and marca = ? and dataingresso= ?", "#{@stallaoper.id}", "#{capomod[3]}", "#{capomod[18][6,4]}-#{capomod[18][3,2]}-#{capomod[18][0,2]}"])
+					Registros.delete(capocancreg.id)
+				end
 				Animals.delete(capomod[0])
 				Conferma.conferma(modcapo, "Movimento eliminato.")
 				modcapo.destroy

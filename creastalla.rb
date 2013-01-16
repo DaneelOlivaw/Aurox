@@ -21,12 +21,16 @@ def creastalla
 	#Selezione della stalla
 	labelstalle = Gtk::Label.new("Seleziona una stalla:") 
 	boxcreastalla1.pack_start(labelstalle, false, false, 5)
-	lista317 = Gtk::ListStore.new(String, Integer)
+	lista317 = Gtk::ListStore.new(String, Integer, String, String, String)
 	sel317 = Stalles.find(:all)
 	sel317.each do |cod|
 		iter317 = lista317.append
 		iter317[0] = cod.cod317
 		iter317[1] = cod.id
+		iter317[2] = cod.via
+		iter317[3] = cod.comune
+		iter317[4] = cod.provincia
+
 	end
 	combo317 = Gtk::ComboBox.new(lista317)
 	renderer1 = Gtk::CellRendererText.new
@@ -49,7 +53,6 @@ def creastalla
 		else
 			iterragsoc[2] = rsoc.codfisc
 		end
-		
 	end
 	comboragsoc = Gtk::ComboBox.new(listaragsoc)
 	renderer1 = Gtk::CellRendererText.new
@@ -145,7 +148,7 @@ def creastalla
 				allev = Allevamentis.find(:all, :conditions => ["ragsoc= ? and idfisc= ? and cod317= ?", "#{comboragsoc.active_iter[0]}", "#{comboragsoc.active_iter[2]}", "#{combo317.active_iter[0]}"])
 #				puts allev.length
 				if allev.length == 0
-					Allevamentis.create(:ragsoc => "#{comboragsoc.active_iter[0]}", :idfisc => "#{comboragsoc.active_iter[2]}", :cod317 => "#{combo317.active_iter[0]}")
+					Allevamentis.create(:ragsoc => "#{comboragsoc.active_iter[0]}", :idfisc => "#{comboragsoc.active_iter[2]}", :cod317 => "#{combo317.active_iter[0]}", :via => "#{combo317.active_iter[2]}", :comune => "#{combo317.active_iter[3]}", :provincia => "#{combo317.active_iter[4]}")
 #					puts "bau"
 				end
 				Conferma.conferma(mcreastalla, "Dati inseriti correttamente")

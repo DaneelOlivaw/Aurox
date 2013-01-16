@@ -15,7 +15,7 @@ def ricercapresenti
 	boxvisp.pack_start(boxvisp2, false, false, 5)
 	boxvisp.pack_start(boxvisp3, true, true, 5)
 	mvisperm.add(boxvisp)
-	selpres = 0
+	selpres = ""
 	giorno = 0
 	#giornipres = 0
 	def ricercapres(selpres, listapres, labelcontopres)
@@ -228,7 +228,11 @@ def ricercapresenti
 	boxvisp2.pack_start(labelcontopres, false, false, 5)
 	bottstampa = Gtk::Button.new( "Stampa" )
 	bottstampa.signal_connect("clicked") {
-		stampapresgiorno(selpres, giorno.to_date.strftime("%d/%m/%Y"), selpres.length)
+		if selpres.length > 0
+			stampapresgiorno(selpres, giorno.to_date.strftime("%d/%m/%Y"), selpres.length)
+		else
+			Errore.avviso(mvisperm, "Non ci sono dati da stampare.")
+		end
 	}
 	boxvisp.pack_start(bottstampa, false, false, 0)
 	bottchiudi = Gtk::Button.new( "Chiudi" )

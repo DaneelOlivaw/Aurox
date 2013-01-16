@@ -94,13 +94,18 @@ def registronuovo(window)
 	#contid = Relazs.find(:first, :conditions => "id = '#{@stallaoper}'")
 	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and stampascarico= ? and tipouscita != ?", "#{@stallaoper.id}", "0", "null"], :order => ["dataingresso, id"])
 	selcapi.each do |i, index|
-		if i.tipouscita == "V" or i.tipouscita == "C"
+		#puts i.id
+		if (i.tipouscita == "V" or i.tipouscita == "C") and i.mod4usc.to_s != ""
 			mod4 = i.mod4usc.split("/")
 			mod4anno = mod4[1]
 			mod4num = mod4[2]
 			mod4pul = mod4num + "/" + mod4anno.to_s[2,2]
 		else
-			mod4pul = i.certsanusc
+			if i.certsanusc.split(".").length == 4
+				mod4pul = i.certsanusc.split(".")[3].to_s
+			else
+				mod4pul = i.certsanusc
+			end
 		end
 
 		if i.destinazione.length > 18
@@ -123,6 +128,7 @@ def registronuovo(window)
 		end
 
 		avviso = Gtk::MessageDialog.new(window, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "La stampa è stata eseguita correttamente?")
+		#avviso.modal == true
 		risposta = avviso.run
 		avviso.destroy
 		if risposta == Gtk::Dialog::RESPONSE_YES

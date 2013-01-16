@@ -73,7 +73,7 @@ def mascnascita(finestra, labelingr)
 			errore = 0
 			@dataingingl = @dataing.text[4,2] + @dataing.text[2,2] + @dataing.text[0,2]
 			@dataingingl = Time.parse("#{@dataingingl}").strftime("%Y")[0,2] + @dataingingl
-			if @dataing.text.to_i == 0 #and 
+			if @dataing.text.to_i == 0 or @dataing.text.length < 6
 				Errore.avviso(mnascita, "Data di ingresso sbagliata.")
 				errore = 1
 			elsif Time.parse("#{@dataingingl}") < Time.parse("#{@datanasingl}")

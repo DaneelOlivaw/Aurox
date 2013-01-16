@@ -15,7 +15,7 @@ def ricercapermanenza
 	boxvisp.pack_start(boxvisp2, false, false, 5)
 	boxvisp.pack_start(boxvisp3, true, true, 5)
 	mvisperm.add(boxvisp)
-	selperm = 0
+	selperm = ""
 	giornipres = 0
 	def ricercaperm(selperm, listaperm, labelcontoperm, valtipo)
 		selperm.each do |m|
@@ -222,7 +222,11 @@ def ricercapermanenza
 	boxvisp2.pack_start(labelcontoperm, false, false, 5)
 	bottstampa = Gtk::Button.new( "Stampa" )
 	bottstampa.signal_connect("clicked") {
-		stampapresgiorni(selperm, giornipres, selperm.length, valtipo)
+		if selperm.length > 0
+			stampapresgiorni(selperm, giornipres, selperm.length, valtipo)
+		else
+			Errore.avviso(mvisperm, "Non ci sono dati da stampare.")
+		end
 	}
 	boxvisp.pack_start(bottstampa, false, false, 0)
 	bottchiudi = Gtk::Button.new( "Chiudi" )

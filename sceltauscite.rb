@@ -15,6 +15,8 @@ def mascuscite(finestra)
 	muscitescroll2 = Gtk::ScrolledWindow.new
 	labelselezione = Gtk::Label.new #("Capi presenti")
 	labelselezionati = Gtk::Label.new
+	totcapi = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo = ? and uscito = ?", "#{@stallaoper.id}", "I", "0"]).length
+	labeltotcapi = Gtk::Label.new("Totale capi presenti: #{totcapi}")
 	boxuscv.pack_start(boxusc0, false, false, 5)
 	boxuscv.pack_start(boxusc3, false, false, 5)
 	boxuscv.pack_start(boxusc1, true, true, 0)
@@ -275,6 +277,8 @@ def mascuscite(finestra)
 				datimacellazione(finestra, muscite, listasel, combousc)
 			elsif combousc.active_iter[0] == 6
 				datifurto(finestra, muscite, listasel, combousc)
+			elsif combousc.active_iter[0] == 16
+				datiestero(finestra, muscite, listasel, combousc)
 			else
 				datiuscita(finestra, muscite, listasel, combousc)
 			end
@@ -285,6 +289,7 @@ def mascuscite(finestra)
 	boxusc0.pack_start(tutti, false, false, 50)
 	boxusc0.pack_start(cerca, false, false, 5)
 	boxusc0.pack_start(bottonecerca, false, false, 5)
+	boxusc0.pack_start(labeltotcapi, false, false, 5)
 	boxusc3.pack_start(labelselezione, true, true, 5)
 	boxusc3.pack_start(labelselezionati, true, true, 5)
 	boxusc1.pack_start(muscitescroll1, true, true, 5)
