@@ -1,8 +1,8 @@
--- MySQL dump 10.11
+-- MySQL dump 10.13  Distrib 5.1.62, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: aurox
 -- ------------------------------------------------------
--- Server version	5.0.75-0ubuntu10.5
+-- Server version	5.1.62-0ubuntu0.11.04.1-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -20,16 +20,19 @@
 --
 
 DROP TABLE IF EXISTS `allevamentis`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `allevamentis` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ragsoc` varchar(50) NOT NULL,
   `idfisc` varchar(20) NOT NULL,
   `cod317` varchar(8) NOT NULL,
-  PRIMARY KEY  (`id`)
+  `via` varchar(50) DEFAULT NULL,
+  `comune` varchar(50) DEFAULT NULL,
+  `provincia` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `allevamentis`
@@ -45,13 +48,13 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `animals`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `animals` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `relaz_id` int(11) NOT NULL,
   `tipo` varchar(1) NOT NULL,
-  `cm_ing` int(11) default NULL,
+  `cm_ing` int(11) DEFAULT NULL,
   `marca` varchar(14) NOT NULL,
   `specie` varchar(3) NOT NULL,
   `razza_id` int(11) NOT NULL,
@@ -60,38 +63,38 @@ CREATE TABLE `animals` (
   `sesso` varchar(1) NOT NULL,
   `naz_orig` varchar(2) NOT NULL,
   `naz_nasprimimp` varchar(2) NOT NULL,
-  `data_applm` date default NULL,
-  `ilg` varchar(1) default NULL,
-  `embryo` varchar(1) default NULL,
-  `marca_prec` varchar(14) default NULL,
-  `marca_madre` varchar(14) default NULL,
-  `marca_padre` varchar(14) default NULL,
-  `donatrice` varchar(14) default NULL,
-  `clg` varchar(30) default NULL,
-  `data_ingr` date default NULL,
-  `naz_prov` varchar(2) default NULL,
-  `certsan` varchar(30) default NULL,
-  `rifloc` varchar(50) default NULL,
-  `allevamenti_id` int(11) default NULL,
-  `mod4` varchar(20) default NULL,
-  `data_mod4` date default NULL,
-  `cm_usc` int(11) default NULL,
-  `uscita` date default NULL,
-  `ditta_racc` varchar(50) default NULL,
-  `trasp` varchar(50) default NULL,
-  `marcasost` varchar(14) default NULL,
-  `data_certsan` date default NULL,
-  `naz_dest` varchar(2) default NULL,
-  `macelli_id` int(11) default NULL,
-  `certsanusc` varchar(20) default NULL,
-  `data_certsanusc` date default NULL,
-  `idcoll` int(11) default NULL COMMENT 'id del movimento collegato (se ingresso, avrà quello dell''uscita o vuoto se non è uscito, se uscita sarà l''ingresso corrispondente)',
-  `uscito` int(11) NOT NULL default '0',
-  `registro` tinyint(1) NOT NULL default '0',
-  `file` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  `data_applm` date DEFAULT NULL,
+  `ilg` varchar(1) DEFAULT NULL,
+  `embryo` varchar(1) DEFAULT NULL,
+  `marca_prec` varchar(14) DEFAULT NULL,
+  `marca_madre` varchar(14) DEFAULT NULL,
+  `marca_padre` varchar(14) DEFAULT NULL,
+  `donatrice` varchar(14) DEFAULT NULL,
+  `clg` varchar(30) DEFAULT NULL,
+  `data_ingr` date DEFAULT NULL,
+  `naz_prov` varchar(2) DEFAULT NULL,
+  `certsan` varchar(30) DEFAULT NULL,
+  `rifloc` varchar(50) DEFAULT NULL,
+  `allevamenti_id` int(11) DEFAULT NULL,
+  `mod4` varchar(20) DEFAULT NULL,
+  `data_mod4` date DEFAULT NULL,
+  `cm_usc` int(11) DEFAULT NULL,
+  `uscita` date DEFAULT NULL,
+  `ditta_racc` varchar(50) DEFAULT NULL,
+  `trasp` varchar(50) DEFAULT NULL,
+  `marcasost` varchar(14) DEFAULT NULL,
+  `data_certsan` date DEFAULT NULL,
+  `naz_dest` varchar(2) DEFAULT NULL,
+  `macelli_id` int(11) DEFAULT NULL,
+  `certsanusc` varchar(20) DEFAULT NULL,
+  `data_certsanusc` date DEFAULT NULL,
+  `idcoll` int(11) DEFAULT NULL COMMENT 'id del movimento collegato (se ingresso, avrÃ  quello dell''uscita o vuoto se non Ã¨ uscito, se uscita sarÃ  l''ingresso corrispondente)',
+  `uscito` int(11) NOT NULL DEFAULT '0',
+  `registro` tinyint(1) NOT NULL DEFAULT '0',
+  `file` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `animals`
@@ -103,30 +106,29 @@ LOCK TABLES `animals` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `contatoris`
+-- Table structure for table `detentoris`
 --
 
-DROP TABLE IF EXISTS `contatoris`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `contatoris` (
-  `id` int(11) NOT NULL auto_increment,
-  `mod4usc` varchar(10) NOT NULL,
-  `pagregcar` varchar(10) NOT NULL,
-  `pagregscar` varchar(10) NOT NULL,
-  `pagreg` varchar(10) NOT NULL,
-  `progreg` varchar(10) NOT NULL,
-  PRIMARY KEY  (`id`)
+DROP TABLE IF EXISTS `detentoris`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detentoris` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `detentore` varchar(50) NOT NULL,
+  `codfisc` varchar(20) DEFAULT NULL,
+  `piva` varchar(20) DEFAULT NULL,
+  `idf` varchar(1) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `contatoris`
+-- Dumping data for table `detentoris`
 --
 
-LOCK TABLES `contatoris` WRITE;
-/*!40000 ALTER TABLE `contatoris` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contatoris` ENABLE KEYS */;
+LOCK TABLES `detentoris` WRITE;
+/*!40000 ALTER TABLE `detentoris` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detentoris` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -134,13 +136,13 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `ingressos`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ingressos` (
   `codice` int(11) NOT NULL,
   `descr` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ingressos`
@@ -157,66 +159,66 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `luncampis`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `luncampis` (
-  `id` int(11) NOT NULL auto_increment,
-  `tipo` int(20) default NULL,
-  `operazione` int(20) default NULL,
-  `cod317` int(20) default NULL,
-  `ragsoc` int(20) default NULL,
-  `tifragsoc` int(20) default NULL,
-  `ifragsoc` int(20) default NULL,
-  `atp` int(20) default NULL,
-  `prop` int(20) default NULL,
-  `tifprop` int(20) default NULL,
-  `ifprop` int(20) default NULL,
-  `marca` int(20) default NULL,
-  `specie` int(20) default NULL,
-  `razza` int(20) default NULL,
-  `nascita` int(20) default NULL,
-  `cod317nascita` int(20) default NULL,
-  `sesso` int(20) default NULL,
-  `nazorig` int(20) default NULL,
-  `nazprimimp` int(20) default NULL,
-  `applmarca` int(20) default NULL,
-  `ilg` int(20) default NULL,
-  `marcaprec` int(20) default NULL,
-  `madre` int(20) default NULL,
-  `padre` int(20) default NULL,
-  `datapass` int(20) default NULL,
-  `codmoving` int(20) default NULL,
-  `dataing` int(20) default NULL,
-  `cod317prov` int(20) default NULL,
-  `comuneprov` int(20) default NULL,
-  `nazprov` int(20) default NULL,
-  `codmovusc` int(20) default NULL,
-  `datausc` int(20) default NULL,
-  `cod317dest` int(20) default NULL,
-  `comunedest` int(20) default NULL,
-  `nazdest` int(20) default NULL,
-  `ragsocdest` int(20) default NULL,
-  `trasportatore` int(20) default NULL,
-  `comunetrasp` int(20) default NULL,
-  `targatrasp` int(20) default NULL,
-  `mod4` int(20) default NULL,
-  `marcasost` int(20) default NULL,
-  `idfiscall` int(20) default NULL,
-  `datamod4` int(20) default NULL,
-  `codlibgen` int(20) default NULL,
-  `regmac` int(20) default NULL,
-  `idfiscmac` int(20) default NULL,
-  `bollomac` int(20) default NULL,
-  `embryo` int(20) default NULL,
-  `idfisc317nasc` int(20) default NULL,
-  `dataprimoingr` int(20) default NULL,
-  `madreembryotransf` int(20) default NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` int(20) DEFAULT NULL,
+  `operazione` int(20) DEFAULT NULL,
+  `cod317` int(20) DEFAULT NULL,
+  `ragsoc` int(20) DEFAULT NULL,
+  `tifragsoc` int(20) DEFAULT NULL,
+  `ifragsoc` int(20) DEFAULT NULL,
+  `atp` int(20) DEFAULT NULL,
+  `prop` int(20) DEFAULT NULL,
+  `tifprop` int(20) DEFAULT NULL,
+  `ifprop` int(20) DEFAULT NULL,
+  `marca` int(20) DEFAULT NULL,
+  `specie` int(20) DEFAULT NULL,
+  `razza` int(20) DEFAULT NULL,
+  `nascita` int(20) DEFAULT NULL,
+  `cod317nascita` int(20) DEFAULT NULL,
+  `sesso` int(20) DEFAULT NULL,
+  `nazorig` int(20) DEFAULT NULL,
+  `nazprimimp` int(20) DEFAULT NULL,
+  `applmarca` int(20) DEFAULT NULL,
+  `ilg` int(20) DEFAULT NULL,
+  `marcaprec` int(20) DEFAULT NULL,
+  `madre` int(20) DEFAULT NULL,
+  `padre` int(20) DEFAULT NULL,
+  `datapass` int(20) DEFAULT NULL,
+  `codmoving` int(20) DEFAULT NULL,
+  `dataing` int(20) DEFAULT NULL,
+  `cod317prov` int(20) DEFAULT NULL,
+  `comuneprov` int(20) DEFAULT NULL,
+  `nazprov` int(20) DEFAULT NULL,
+  `codmovusc` int(20) DEFAULT NULL,
+  `datausc` int(20) DEFAULT NULL,
+  `cod317dest` int(20) DEFAULT NULL,
+  `comunedest` int(20) DEFAULT NULL,
+  `nazdest` int(20) DEFAULT NULL,
+  `ragsocdest` int(20) DEFAULT NULL,
+  `trasportatore` int(20) DEFAULT NULL,
+  `comunetrasp` int(20) DEFAULT NULL,
+  `targatrasp` int(20) DEFAULT NULL,
+  `mod4` int(20) DEFAULT NULL,
+  `marcasost` int(20) DEFAULT NULL,
+  `idfiscall` int(20) DEFAULT NULL,
+  `datamod4` int(20) DEFAULT NULL,
+  `codlibgen` int(20) DEFAULT NULL,
+  `regmac` int(20) DEFAULT NULL,
+  `idfiscmac` int(20) DEFAULT NULL,
+  `bollomac` int(20) DEFAULT NULL,
+  `embryo` int(20) DEFAULT NULL,
+  `idfisc317nasc` int(20) DEFAULT NULL,
+  `dataprimoingr` int(20) DEFAULT NULL,
+  `madreembryotransf` int(20) DEFAULT NULL,
   `rifloc` int(11) NOT NULL,
   `certsan` int(11) NOT NULL,
-  `crlf` int(20) default NULL,
-  PRIMARY KEY  (`id`)
+  `crlf` int(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `luncampis`
@@ -233,17 +235,20 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `macellis`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `macellis` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nomemac` varchar(50) NOT NULL,
   `ifmac` varchar(24) NOT NULL,
   `bollomac` varchar(20) NOT NULL,
   `region_id` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
+  `via` varchar(50) DEFAULT NULL,
+  `comune` varchar(50) DEFAULT NULL,
+  `provincia` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `macellis`
@@ -259,16 +264,16 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `nations`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nations` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `codice` varchar(2) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `tipo` int(1) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `nations`
@@ -285,17 +290,17 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `props`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `props` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `prop` varchar(50) NOT NULL,
-  `codfisc` varchar(20) default NULL,
-  `piva` varchar(20) default NULL,
+  `codfisc` varchar(20) DEFAULT NULL,
+  `piva` varchar(20) DEFAULT NULL,
   `idf` varchar(1) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `props`
@@ -311,17 +316,17 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `ragsocs`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ragsocs` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ragsoc` varchar(50) NOT NULL,
-  `codfisc` varchar(20) default NULL,
-  `piva` varchar(20) default NULL,
+  `codfisc` varchar(20) DEFAULT NULL,
+  `piva` varchar(20) DEFAULT NULL,
   `idf` varchar(1) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ragsocs`
@@ -337,15 +342,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `razzas`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `razzas` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cod_razza` varchar(3) NOT NULL,
   `razza` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `razzas`
@@ -362,15 +367,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `regions`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `regions` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `codreg` varchar(3) NOT NULL,
   `regione` varchar(50) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `regions`
@@ -387,12 +392,11 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `registros`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registros` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `relaz_id` int(11) NOT NULL,
-  `contatori_id` int(11) NOT NULL,
   `progressivo` varchar(11) NOT NULL,
   `marca` varchar(14) NOT NULL,
   `razza` varchar(3) NOT NULL,
@@ -402,20 +406,20 @@ CREATE TABLE `registros` (
   `datanascita` date NOT NULL,
   `dataingresso` date NOT NULL,
   `provenienza` varchar(50) NOT NULL,
-  `tipouscita` varchar(1) default NULL,
-  `datauscita` date default NULL,
-  `destinazione` varchar(50) default NULL,
-  `marcaprec` varchar(14) default NULL,
-  `mod4ingr` varchar(20) default NULL,
-  `mod4usc` varchar(20) default NULL,
-  `certsaningr` varchar(30) default NULL,
-  `certsanusc` varchar(30) default NULL,
+  `tipouscita` varchar(1) DEFAULT NULL,
+  `datauscita` date DEFAULT NULL,
+  `destinazione` varchar(50) DEFAULT NULL,
+  `marcaprec` varchar(14) DEFAULT NULL,
+  `mod4ingr` varchar(20) DEFAULT NULL,
+  `mod4usc` varchar(20) DEFAULT NULL,
+  `certsaningr` varchar(30) DEFAULT NULL,
+  `certsanusc` varchar(30) DEFAULT NULL,
   `ragsoc` varchar(50) NOT NULL,
-  `stampacarico` tinyint(1) NOT NULL default '0',
-  `stampascarico` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  `stampacarico` tinyint(1) NOT NULL DEFAULT '0',
+  `stampascarico` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `registros`
@@ -431,18 +435,21 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `relazs`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `relazs` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `stalle_id` int(11) NOT NULL,
   `ragsoc_id` int(11) NOT NULL,
+  `detentori_id` int(11) NOT NULL DEFAULT '0',
   `prop_id` int(11) NOT NULL,
-  `contatori_id` int(11) NOT NULL,
   `atp` varchar(3) NOT NULL,
-  PRIMARY KEY  (`id`)
+  `mod4usc` varchar(10) NOT NULL DEFAULT '0/00',
+  `progreg` varchar(10) NOT NULL DEFAULT '0/00',
+  `ultimoreg` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `relazs`
@@ -458,15 +465,21 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `stalles`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stalles` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cod317` varchar(8) NOT NULL,
-  PRIMARY KEY  (`id`),
+  `via` varchar(50) DEFAULT NULL,
+  `comune` varchar(50) DEFAULT NULL,
+  `provincia` varchar(2) DEFAULT NULL,
+  `region_id` int(11) NOT NULL,
+  `ulss` int(11) NOT NULL,
+  `citta_ulss` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `stalles`
@@ -482,14 +495,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `trasportatoris`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `trasportatoris` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nometrasp` varchar(50) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trasportatoris`
@@ -505,13 +518,13 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `uscites`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `uscites` (
   `codice` int(11) NOT NULL,
   `descr` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `uscites`
@@ -532,4 +545,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-01-17 14:45:35
+-- Dump completed on 2013-01-17 10:05:27
