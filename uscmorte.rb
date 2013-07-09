@@ -1,4 +1,4 @@
-def datimorte(finestra, muscite, listasel, combousc)
+def uscmorte(finestra, muscite, listasel, combousc)
 	mdatimorte = Gtk::Window.new("Morte")
 	mdatimorte.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxuscv = Gtk::VBox.new(false, 0)

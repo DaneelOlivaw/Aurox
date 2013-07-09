@@ -1,4 +1,4 @@
-def inscapo
+def daticapoingr
 
 	finestraingr = Gtk::Window.new("Dati del capo")
 	finestraingr.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
@@ -29,7 +29,8 @@ def inscapo
 	boxingr1.pack_start(bottaltricod, true, false, 0)
 
 	bottaltricod.signal_connect("clicked") {
-		insaltricod(finestraingr)
+		require 'codbarrefr'
+		codbarrefr(finestraingr)
 	}
 	bottaltricod = Gtk::Button.new("Codice a barre italiano")
 	boxingr1.pack_start(bottaltricod, true, false, 0)
@@ -512,15 +513,18 @@ def inscapo
 		if @comboing.active_iter[0] == 1
 #			puts "nascita"
 			@nnaz = "IT"
-			mascnascita(finestraingr, labelingr)
+			require 'ingrnascita'
+			ingrnascita(finestraingr, labelingr)
 		elsif @comboing.active_iter[0] == 13 or @comboing.active_iter[0] == 32
 #			puts "prima importazione"
 			@nnaz = @combonaznas.active_iter[2]
-			mascprimimp(finestraingr, labelingr)
+			require 'ingrprimaimp'
+			ingrprimaimp(finestraingr, labelingr)
 		else
 #			puts "altro"
 			@nnaz = "IT"
-			mascingressi(finestraingr, labelingr)
+			require'ingrgenerica'
+			ingrgenerica(finestraingr, labelingr)
 		end
 	end
 	}

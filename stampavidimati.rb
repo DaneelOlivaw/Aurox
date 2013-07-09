@@ -1,6 +1,6 @@
 # Finestra di stampa vidimati
 
-def mascvidimati
+def stampavidimati
 	mvidimati = Gtk::Window.new("Stampa fogli da vidimare")
 	mvidimati.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxvidimv = Gtk::VBox.new(false, 0)
@@ -40,6 +40,7 @@ def mascvidimati
 #	end
 	#npagr = 0
 	#progreg = 25
+	#puts @stallaoper.ultimoreg+1
 	labelreg = Gtk::Label.new("Registro aziendale numero: #{@stallaoper.ultimoreg+1}")
 	boxvidim1.pack_start(labelreg, false, false, 5)
 	labelnpagine = Gtk::Label.new("Numero pagine da stampare:")

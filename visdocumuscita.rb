@@ -1,6 +1,6 @@
 #def visdocusc(selcapo, nazorig, naznas, movingr, dataingr, nazprov)
 #def visdocumuscita(arrdoc, tipodocumento, documento, nazorig, naznas, movingr, dataingr, nazprov, labeltotcapi)
-def visdocumuscita(arrdoc, tipodocumento, documento, combonazdest, comboalldest, combomacdest, combomovusc, datausc, certsan, datacertsan, mod4, datamod4, labeltotcapi)
+def visdocumuscita(arrdoc, tipodocumento, labeldocumento, combonazdest, comboalldest, combomacdest, combomovusc, datausc, certsan, datacertsan, mod4, datamod4, labeltotcapi)
 	mvisdocusc = Gtk::Window.new("Selezione documento di uscita")
 	mvisdocusc.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	mvisdocusc.set_default_size(700, 400)
@@ -12,7 +12,7 @@ def visdocumuscita(arrdoc, tipodocumento, documento, combonazdest, comboalldest,
 	boxmovv.pack_start(boxmov1, false, false, 5)
 	boxmovv.pack_start(boxmov2, true, true, 5)
 	mvisdocusc.add(boxmovv)
-
+	#puts combonazdest.inspect
 	#puts array.inspect
 	#puts arrdoc.inspect
 	hash2 = Hash.new
@@ -113,14 +113,17 @@ def visdocumuscita(arrdoc, tipodocumento, documento, combonazdest, comboalldest,
 		#puts selmov.selected[0]
 		selcapi = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and #{tipodocumento} LIKE ?", "#{@stallaoper.id}", "U", "#{selmov.selected[0]}"])
 		#puts selcapi.length
+		@totcapi = selcapi.length
 		selcapi.each {|x| @arridcapi << [x.id, x.marca, x.registro]}
 		#puts @arridcapi.inspect
 		@datauscingl = selcapi[0].uscita
 		#puts @datauscingl
 		#@dataingringl = selcapi[0].data_ingr
 		#puts @dataingringl
-		documento.text = selmov.selected[0]
+		labeldocumento.text = "Documento: #{selmov.selected[0]}"
+		@documento = selmov.selected[0]
 	#	#nascita.text = selmov[0].data_nas.strftime("%d/%m/%Y")
+		unless combonazdest == nil
 		combonazdest.set_active(0)
 		contanazdest = -1
 		if selcapi[0].naz_dest.to_s != ""
@@ -171,7 +174,7 @@ def visdocumuscita(arrdoc, tipodocumento, documento, combonazdest, comboalldest,
 		if selcapi[0].data_mod4 != nil
 			datamod4.text = ("#{selcapi[0].data_mod4.strftime("%d%m%y")}")
 		end
-	
+		end
 #		puts "selcapi:"
 #		selcapi.each do |s|
 #			puts s.id

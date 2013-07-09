@@ -9,6 +9,7 @@ ActiveRecord::Base.establish_connection(
 
 class Relazs < ActiveRecord::Base
         has_many :animal
+        has_many :mod4temp
         belongs_to :user, :class_name => "Users"
         belongs_to :stalle, :class_name => "Stalles"
         belongs_to :ragsoc, :class_name => "Ragsocs"
@@ -60,15 +61,18 @@ end
 
 class Allevamentis < ActiveRecord::Base
         has_many :animal
+        has_many :mod4temp
 end
 
 class Macellis < ActiveRecord::Base
         has_many :animal
+        has_many :mod4temp
         belongs_to :region, :class_name => "Regions"
 end
 
 class Trasportatoris < ActiveRecord::Base
         has_many :animal
+        #has_many :mod4temp
 end
 
 class Luncampis < ActiveRecord::Base
@@ -84,4 +88,10 @@ end
 
 class Regions < ActiveRecord::Base
         has_many :macelli
+end
+class Mod4temps < ActiveRecord::Base
+        belongs_to :relaz, :class_name => "Relazs"
+        belongs_to :allevamenti, :class_name => "Allevamentis"
+        belongs_to :macelli, :class_name => "Macellis"
+        #belongs_to :trasportatori, :class_name => "Trasportatoris"
 end

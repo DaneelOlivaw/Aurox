@@ -1,6 +1,6 @@
 #def visdocusc(selcapo, nazorig, naznas, movingr, dataingr, nazprov)
 #def visdocumingresso(arrdoc, tipodocumento, documento, nazorig, naznas, movingr, dataingr, nazprov, labeltotcapi)
-def visdocumingresso(arrdoc, tipodocumento, documento, combonazprov, comboallprov, combomovingr, dataingr, certsan, rifloc, mod4, datamod4, labeltotcapi)
+def visdocumingresso(arrdoc, tipodocumento, labeldocumento, combonazprov, comboallprov, combomovingr, dataingr, certsan, rifloc, mod4, datamod4, labeltotcapi)
 	mvisdocingr = Gtk::Window.new("Selezione documento di ingresso")
 	mvisdocingr.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	mvisdocingr.set_default_size(700, 400)
@@ -12,7 +12,7 @@ def visdocumingresso(arrdoc, tipodocumento, documento, combonazprov, comboallpro
 	boxmovv.pack_start(boxmov1, false, false, 5)
 	boxmovv.pack_start(boxmov2, true, true, 5)
 	mvisdocingr.add(boxmovv)
-
+	#puts @documento
 	#puts array.inspect
 	#puts arrdoc.inspect
 	hash2 = Hash.new
@@ -113,14 +113,18 @@ def visdocumingresso(arrdoc, tipodocumento, documento, combonazprov, comboallpro
 		#puts selmov.selected[0]
 		selcapi = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and #{tipodocumento} LIKE ?", "#{@stallaoper.id}", "I", "#{selmov.selected[0]}"])
 		#puts selcapi.length
+		@totcapi = selcapi.length
 		selcapi.each {|x| @arridcapi << [x.id, x.marca, x.registro]}
 		#puts @arridcapi.inspect
 		@dataingringl = selcapi[0].data_ingr
 		#puts @dataingringl
 		#@dataingringl = selcapi[0].data_ingr
 		#puts @dataingringl
-		documento.text = selmov.selected[0]
+		labeldocumento.text = "Documento: #{selmov.selected[0]}"
+		@documento = selmov.selected[0] #unless documento == nil
+		#puts @documento
 	#	#nascita.text = selmov[0].data_nas.strftime("%d/%m/%Y")
+	unless combonazprov == nil
 		combonazprov.set_active(0)
 		contanazprov = -1
 		if selcapi[0].naz_prov != ""
@@ -189,7 +193,7 @@ def visdocumingresso(arrdoc, tipodocumento, documento, combonazprov, comboallpro
 #			puts s.id
 #		end
 	
-	
+	end
 #		nazorig.text = selcapi[0].naz_dest
 #		naznas.text = selcapi[0].naz_dest
 #	#	#madre.text = selmov[0].marca_madre

@@ -130,6 +130,7 @@ def modpartitaingresso
 
 	@arridcapi = []
 	@dataingringl = ""
+	@documento = ""
 #	labelcercapartita = Gtk::Label.new("Cerca:")
 #	boxricerca.pack_start(labelcercapartita, false, false, 10)
 
@@ -168,10 +169,10 @@ def modpartitaingresso
 
 	labeldocumento = Gtk::Label.new("Documento:")
 	boxrisultato.pack_start(labeldocumento, false, false, 5)
-	documento = Gtk::Entry.new
-	documento.width_chars=(21)
-	documento.editable = false
-	boxrisultato.pack_start(documento, false, false, 5)
+#	documento = Gtk::Entry.new
+#	documento.width_chars=(21)
+#	documento.editable = false
+#	boxrisultato.pack_start(documento, false, false, 5)
 	
 	labeltotcapi = Gtk::Label.new("Totale capi:")
 	boxrisultato.pack_start(labeltotcapi, false, false, 5)
@@ -181,7 +182,7 @@ def modpartitaingresso
 		if @arridcapi.length == 0
 			Errore.avviso(modpartingr, "Devi selezionare un documento.")
 		else
-			viscapi = Gtk::Window.new("Capi del documento #{documento.text}")
+			viscapi = Gtk::Window.new("Capi del documento #{@documento}")
 			viscapi.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 			viscapi.set_default_size(400, 400)
 			viscapiscroll = Gtk::ScrolledWindow.new #(hadjustment = nil, vadjustment = nil)
@@ -488,7 +489,7 @@ def modpartitaingresso
 					#puts selcapi.length
 					@dataingringl = selcapi[0].data_ingr
 					#puts @dataingringl
-					documento.text = arrdoc[0]
+					@documento = arrdoc[0]
 		#			#nascita.text = selmov[0].data_nas.strftime("%d/%m/%Y")
 					#	if capomod[31].to_s != ""
 					#puts selcapi[31]
@@ -550,6 +551,7 @@ def modpartitaingresso
 					#movingr.text = selcapi[0].cm_usc.to_s
 					#dataingr.text = selcapi[0].uscita.strftime("%d/%m/%Y")
 					#nazprov.text = selcapi[0].naz_dest
+					labeldocumento.text = "Documento: #{arrdoc[0]}"
 					labeltotcapi.text = ("Capi della partita: #{selcapi.length}")
 
 
@@ -557,7 +559,8 @@ def modpartitaingresso
 					#puts "Più di uno o zero"
 					#visunipeg(selmov, nazorig, naznas, movingr, dataingr, nazprov)
 					#puts arr.uniq.inspect
-					visdocumingresso(arrdoc.uniq, tipodocumento, documento, combonazprov, comboallprov, combomovingr, dataingr, certsan, rifloc, mod4, datamod4, labeltotcapi)
+					require 'visdocumingresso'
+					visdocumingresso(arrdoc.uniq, tipodocumento, labeldocumento, combonazprov, comboallprov, combomovingr, dataingr, certsan, rifloc, mod4, datamod4, labeltotcapi)
 #					puts "arridcapi:"
 #					@arridcapi.each do |s|
 #						puts s
@@ -667,7 +670,7 @@ def modpartitaingresso
 			end
 			Conferma.conferma(modpartingr, "Movimento modificato.")
 			@arridcapi = []
-			documento.text = ""
+			labeldocumento.text = "Documento:"
 			@dataingringl = ""
 			labeltotcapi.text = ("Capi della partita:")
 			combomovingr.active = -1

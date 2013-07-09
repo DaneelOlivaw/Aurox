@@ -1,6 +1,6 @@
 # Maschera scelta capi da far uscire
 
-def mascuscite(finestra)
+def sceltauscite(finestra, modo)
 	muscite = Gtk::Window.new("Capi da far uscire")
 	muscite.set_default_size(800, 600)
 	muscite.maximize
@@ -15,6 +15,7 @@ def mascuscite(finestra)
 	muscitescroll2 = Gtk::ScrolledWindow.new
 	labelselezione = Gtk::Label.new #("Capi presenti")
 	labelselezionati = Gtk::Label.new
+
 	totcapi = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo = ? and uscito = ?", "#{@stallaoper.id}", "I", "0"]).length
 	labeltotcapi = Gtk::Label.new("Totale capi presenti: #{totcapi}")
 	boxuscv.pack_start(boxusc0, false, false, 5)
@@ -24,9 +25,21 @@ def mascuscite(finestra)
 	boxuscv.pack_start(separator, false, true, 5)
 	boxuscv.pack_start(boxusc4, false, false, 10)
 	muscite.add(boxuscv)
+	provvisori = Mod4temps.find(:all, :conditions => ["relaz_id= ?", "#{@stallaoper.id}"])
+#	if provvisori.length > 0
+#		avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Sono presenti dei modelli 4 provvisori; li mostro?")
+#		risposta = avviso.run
+#		avviso.destroy
+#		if risposta == Gtk::Dialog::RESPONSE_YES
+#			require 'vismod4provv'
+#			puts provvisori.inspect
+#			vismod4provv(provvisori)
+#		end
+#	end
 	#relid = @stallaoper.id
 	@uscenti = 0
 	@contatore = 0
+	@mod4provv = ""
 	labelselezione.set_markup("<b>Capi presenti</b>")
 	labelselezionati.set_markup("<b>Capi da far uscire: #{@uscenti}</b>")
 	lista = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String, String, String)
@@ -91,7 +104,7 @@ def mascuscite(finestra)
 	}
 	listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
 	vista.signal_connect("row-activated") do |view, path, column|
-		trasferisci(muscite, selezione, listasel, lista, labelselezionati)
+		trasferisci(muscite, selezione, listasel, lista, labelselezionati, 0)
 	end
 	def elenca(lista, cerca)
 		lista.clear
@@ -126,15 +139,17 @@ def mascuscite(finestra)
 		end
 	end
 	#listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
-	def trasferisci(finestra, selezione, listasel, lista, labelselezionati)
+	def trasferisci(finestra, selezione, listasel, lista, labelselezionati, indice)
 		#@contatore = 0
-
+		arreliminare = []
 		caposel = selezione.selected
-		#puts caposel
+		#puts caposel[0]
 		if caposel == nil
 			Errore.avviso(finestra, "Nessun capo selezionato.")
 		else
 			path = caposel.path
+			#puts "path"
+			#puts path
 			if listasel.iter_first == nil
 				@contatore+= 1
 				itersel = listasel.append
@@ -153,7 +168,13 @@ def mascuscite(finestra)
 				itersel[12] = caposel[12]
 				itersel[13] = caposel[13]
 				itersel[14] = caposel[14]
-				lista.remove(lista.get_iter(path))
+				#puts "lista.get_iter(path)"
+				#puts lista.get_iter(path)
+				if indice == 0
+					lista.remove(lista.get_iter(path))
+				else
+					arreliminare << lista.get_iter(path)
+				end
 				@uscenti +=1
 				labelselezionati.set_markup("<b>Capi da far uscire: #{@uscenti}</b>")
 			else
@@ -184,17 +205,29 @@ def mascuscite(finestra)
 				itersel[12] = caposel[12]
 				itersel[13] = caposel[13]
 				itersel[14] = caposel[14]
-				lista.remove(lista.get_iter(path))
+				#puts "lista.get_iter(path) 2"
+				#puts lista.get_iter(path)
+				if indice == 0
+					lista.remove(lista.get_iter(path))
+				else
+					arreliminare << lista.get_iter(path)
+				end
+				#lista.remove(path)
 				@uscenti +=1
 				labelselezionati.set_markup("<b>Capi da far uscire: #{@uscenti}</b>")
 			else
+			end
+		end
+		if arreliminare.length > 0
+			arreliminare.each do |e|
+				lista.remove(e)
 			end
 		end
 	end
 	spostasel = Gtk::Button.new( ">>" )
 	#listasel = Gtk::ListStore.new(Integer, String, String, String, Integer, Date, String, String, String, String, Date, String, String, String, String)
 	spostasel.signal_connect( "clicked" ) {
-		trasferisci(muscite, selezione, listasel, lista, labelselezionati)
+		trasferisci(muscite, selezione, listasel, lista, labelselezionati, 0)
 	}
 
 	vista2 = Gtk::TreeView.new(listasel)
@@ -247,7 +280,11 @@ def mascuscite(finestra)
 	labelmotivou = Gtk::Label.new("Motivo uscita:")
 	boxusc2.pack_start(labelmotivou, false, false, 5)
 	listausc = Gtk::ListStore.new(Integer, String)
-	selusc = Uscites.find(:all)
+	if modo == 0 
+		selusc = Uscites.find(:all)
+	else
+		selusc = Uscites.find(:all, :conditions => ["codice != 4 and codice != 6 and codice != 10 and codice != 11 and codice != 16"])
+	end
 	selusc.each do |usc|
 		iteru = listausc.append
 		iteru[0] = usc.codice
@@ -272,15 +309,20 @@ def mascuscite(finestra)
 			if combousc.active == -1
 				Errore.avviso(muscite, "Seleziona un movimento di uscita.")
 			elsif combousc.active_iter[0] == 4
-				datimorte(finestra, muscite, listasel, combousc)
+				require 'uscmorte'
+				uscmorte(finestra, muscite, listasel, combousc)
 			elsif combousc.active_iter[0] == 9
-				datimacellazione(finestra, muscite, listasel, combousc)
+				require 'uscmacellazione'
+				uscmacellazione(finestra, muscite, listasel, combousc, modo)
 			elsif combousc.active_iter[0] == 6
-				datifurto(finestra, muscite, listasel, combousc)
+				require 'uscfurto'
+				uscfurto(finestra, muscite, listasel, combousc)
 			elsif combousc.active_iter[0] == 16
-				datiestero(finestra, muscite, listasel, combousc)
+				require 'uscestero'
+				uscestero(finestra, muscite, listasel, combousc, modo)
 			else
-				datiuscita(finestra, muscite, listasel, combousc)
+				require 'uscgenerica'
+				uscgenerica(finestra, muscite, listasel, combousc, modo)
 			end
 		end
 	}
@@ -307,4 +349,21 @@ def mascuscite(finestra)
 	boxusc4.pack_start(bottchiudi, true, false, 0)
 
 	muscite.show_all
+
+	if provvisori.length > 0
+		avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Sono presenti dei modelli 4 provvisori; li mostro?")
+		risposta = avviso.run
+		avviso.destroy
+		if risposta == Gtk::Dialog::RESPONSE_YES
+			require 'vismod4provv'
+			#puts provvisori.inspect
+			vismod4provv(provvisori, tutti, muscite, selezione, listasel, lista, labelselezionati, vista, combousc)
+		end
+	end
+
+
+
+
+
+
 end

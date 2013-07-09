@@ -24,6 +24,7 @@ def compilaregistro(finestra)
 			compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ? and YEAR(uscita)= ?", "#{@stallaoper.id}", "U", "0", "#{anno}"])
 			#puts compingr.length
 			#puts compusc.length
+			require 'compilazione'
 			compilazione(finestra, compingr, compusc, nprog[0].to_i, nprog[1].to_i)
 		else
 			Conferma.conferma(finestra, "Operazione annullata.")
@@ -32,11 +33,13 @@ def compilaregistro(finestra)
 		#puts "seconda condizione"
 		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr, id"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])
+		require 'compilazione'
 		compilazione(finestra, compingr, compusc, 0, @giorno.strftime("%y"))
 	elsif anno.to_i == @giorno.strftime("%Y").to_i
 		#puts "terza condizione"
 		compingr = Animals.find(:all, :from => "animals", :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "I", "0"], :order => ["data_ingr, id"])
 		compusc = Animals.find(:all, :conditions => ["relaz_id= ? and tipo= ? and registro= ?", "#{@stallaoper.id}", "U", "0"])
+		require 'compilazione'
 		compilazione(finestra, compingr, compusc, nprog[0].to_i, nprog[1].to_i)
 	end
 

@@ -64,7 +64,8 @@ Gtk.init
 	combo2 = Gtk::ComboBox.new(listacombo2)
 	combodet = Gtk::ComboBox.new(listacombodet)
 	combo3 = Gtk::ComboBox.new(listacombo3)
-	menubar = createMenuBar(window, listacombo, combo, combo2, combodet, combo3)
+	require 'menu'
+	menubar = menu(window, listacombo, combo, combo2, combodet, combo3)
 	box1.pack_start(menubar, false, false, 0)
 	box1.pack_start(boxstalla, false, false, 5)
 	box1.pack_start(boxragsoc, false, false, 5)
@@ -74,9 +75,10 @@ Gtk.init
 	ingressi = Gtk::Button.new( "INGRESSI" )
 	ingressi2 = Gtk::Button.new( "INGRESSI NUOVO SISTEMA" )
 	uscite = Gtk::Button.new( "USCITE" )
+	uscite2 = Gtk::Button.new( "MOD. 4 USCITA PROVVISORIO" )
 	bottcreafile = Gtk::Button.new("CREA FILE PER L'INVIO DEI DATI")
 	stampareg = Gtk::Button.new("STAMPA REGISTRO")
-	stampavidimati = Gtk::Button.new("STAMPA PAGINE VIDIMATE")
+	stampavidim = Gtk::Button.new("STAMPA PAGINE VIDIMATE")
 	bottcompilaregistro = Gtk::Button.new("COMPILA IL REGISTRO")
 	sel1 = Stalles.find(:all)
 #	lun = 0
@@ -282,7 +284,8 @@ Gtk.init
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
-			masccontaingr
+			require 'containgressi'
+			containgressi
 		end
 	}
 	ingressi2.signal_connect( "clicked" ) {
@@ -291,7 +294,7 @@ Gtk.init
 		else
 			#puts "Nuovo sistema ingressi"
 			require 'containgressi2'
-			masccontaingr2
+			containgressi2
 			#masccontaingr
 		end
 	}
@@ -299,10 +302,18 @@ Gtk.init
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
-			mascuscite(window)
+			require 'sceltauscite'
+			sceltauscite(window, 0)
 		end
 	}
-
+	uscite2.signal_connect( "clicked" ) {
+		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
+			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
+		else
+			require 'sceltauscite'
+			sceltauscite(window, 1)
+		end
+	}
 	bottcreafile.signal_connect("clicked") {
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
@@ -313,6 +324,7 @@ Gtk.init
 				risposta = avviso.run
 				avviso.destroy
 				if risposta == Gtk::Dialog::RESPONSE_YES
+					require 'creafile'
 					creafile(window)
 				else
 					Conferma.conferma(window, "Operazione annullata.")
@@ -327,15 +339,26 @@ Gtk.init
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
-			#mascstamparegistro
-			registronuovo(window)
+			selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and stampascarico= ? and tipouscita != ?", "#{@stallaoper.id}", "0", "null"], :order => ["dataingresso, id"])
+			if selcapi.length > 0
+				avviso = Gtk::MessageDialog.new(window, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "Ci sono #{selcapi.length} capi da stampare. Procedo?")
+				risposta = avviso.run
+				avviso.destroy
+				if risposta == Gtk::Dialog::RESPONSE_YES
+					require 'stamparegistro'
+					stamparegistro(window, selcapi)
+				end
+			else
+				selcapi = nil
+			end
 		end
 	}
-	stampavidimati.signal_connect("clicked") {
+	stampavidim.signal_connect("clicked") {
 		if combo.active == -1 or combo2.active == -1 or combodet.active == -1 or combo3.active == -1
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
-			mascvidimati
+			require 'stampavidimati'
+			stampavidimati(window)
 		end
 	}
 	bottcompilaregistro.signal_connect("clicked") {
@@ -351,6 +374,7 @@ Gtk.init
 				risposta = avviso.run
 				avviso.destroy
 				if risposta == Gtk::Dialog::RESPONSE_YES
+					require 'compilaregistro'
 					compilaregistro(window)
 				end
 			end
@@ -361,9 +385,10 @@ Gtk.init
 	box1.pack_start(ingressi, false, false, 0)
 	box1.pack_start(ingressi2, false, false, 0)
 	box1.pack_start(uscite, false, false, 0)
+	box1.pack_start(uscite2, false, false, 0)
 	box1.pack_start(bottcreafile, false, false, 5)
 	box1.pack_start(bottcompilaregistro, false, false, 5)
-	box1.pack_start(stampavidimati, false, false, 5)
+	box1.pack_start(stampavidim, false, false, 5)
 	box1.pack_start(stampareg, false, false, 5)
 	bottchiudi = Gtk::Button.new( "ESCI" )
 	bottchiudi.signal_connect("clicked") {

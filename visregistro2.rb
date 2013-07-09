@@ -60,6 +60,7 @@ def visregistro2(selreg, datainizio, datafine, orientamento)
 	vistareg.rules_hint = true
 	disordine = Array.new
 	ordine = Array.new
+	require 'riempimento2'
 	riempimento2(selreg, listareg, labelcontoreg, datainizio, datafine, disordine)
 	#puts disordine.inspect
 #	vistareg.set_enable_grid_lines(true)
@@ -199,6 +200,7 @@ def visregistro2(selreg, datainizio, datafine, orientamento)
 #			puts i.inspect
 #		end
 		#stampareggenerico(selreg, datainizio, datafine, orientamento)
+		require 'stampareggenerico'
 		stampareggenerico(ordine, datainizio, datafine, orientamento)
 	}
 	boxregv.pack_start(bottstampa, false, false, 0)

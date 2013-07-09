@@ -1,4 +1,4 @@
-def mascimportadb(selezione)
+def importadatabase(selezione)
 
 	mimportadb = Gtk::Window.new("Importazione database")
 	mimportadb.window_position=(Gtk::Window::POS_CENTER_ALWAYS)

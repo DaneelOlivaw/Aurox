@@ -1,6 +1,6 @@
 #Richiesta numero capi da inserire
 
-def masccontaingr2
+def containgressi2
 	mcontaingr2 = Gtk::Window.new("")
 	mcontaingr2.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxcontaingrv = Gtk::VBox.new(false, 0)

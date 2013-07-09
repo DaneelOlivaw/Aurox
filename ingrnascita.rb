@@ -1,4 +1,4 @@
-def mascnascita(finestra, labelingr)
+def ingrnascita(finestra, labelingr)
 #	begin
 	mnascita = Gtk::Window.new("Nascita")
 	mnascita.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
@@ -87,7 +87,7 @@ def mascnascita(finestra, labelingr)
 		if errore == 0
 			@depositoingr["dataingr"] = @datanasingl.to_i
 			@depositoingr["nazprov"] = @combonazprov.active_iter[2]
-			allprov = Allevamentis.find(:first, :conditions => "cod317 = '#{@stallaoper.stalle.cod317}'")
+			allprov = Allevamentis.find(:first, :conditions => "cod317 = '#{@stallaoper.stalle.cod317}' and ragsoc = '#{@stallaoper.ragsoc.ragsoc}'")
 			@depositoingr["idallprov"] = allprov.id
 			#Animals.create(:relaz_id => "#{@t.id.to_i}", :tipo => "I", :cm_ing => "#{@comboing.active_iter[0]}", :marca => "#{@marca.text.upcase}", :specie=> "#{@valspecie}", :razza_id => "#{@comborazze.active_iter[0]}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{@stallanas.text.upcase}", :sesso => "#{@valsesso}", :naz_orig => "#{@combonazorig.active_iter[2]}", :naz_nasprimimp => "#{@combonaznas.active_iter[2]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{@valgen}", :embryo => "#{@valembryo}", :marca_prec => "#{@prec.text.upcase}", :marca_madre => "#{@madre.text.upcase}", :marca_padre => "#{@padre.text.upcase}", :donatrice => "#{@don.text.upcase}", :clg => "#{@libgen.text.upcase}", :data_ingr => "#{@dataingingl.to_i}", :naz_prov => "#{@combonazprov.active_iter[2]}", :allevamenti_id => "#{@depositoingr["idallprov"]}")
 			Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "I", :cm_ing => "#{@comboing.active_iter[0]}", :marca => "#{@marca.text.upcase}", :specie=> "#{@valspecie}", :razza_id => "#{@razzaid}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{@stallanas.text.upcase}", :sesso => "#{@valsesso}", :naz_orig => "#{@combonazorig.active_iter[2]}", :naz_nasprimimp => "#{@combonaznas.active_iter[2]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{@valgen}", :embryo => "#{@valembryo}", :marca_prec => "#{@prec.text.upcase}", :marca_madre => "#{@madre.text.upcase}", :marca_padre => "#{@padre.text.upcase}", :donatrice => "#{@don.text.upcase}", :clg => "#{@libgen.text.upcase}", :data_ingr => "#{@dataingingl.to_i}", :naz_prov => "#{@combonazprov.active_iter[2]}", :allevamenti_id => "#{@depositoingr["idallprov"]}")

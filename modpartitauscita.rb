@@ -128,6 +128,7 @@ def modpartitauscita
 
 	@arridcapi = []
 	@datauscingl = ""
+	@documento = ""
 #	labelcercapartita = Gtk::Label.new("Cerca:")
 #	boxricerca.pack_start(labelcercapartita, false, false, 10)
 
@@ -159,10 +160,10 @@ def modpartitauscita
 
 	labeldocumento = Gtk::Label.new("Documento:")
 	boxrisultato.pack_start(labeldocumento, false, false, 5)
-	documento = Gtk::Entry.new
-	documento.width_chars=(21)
-	documento.editable = false
-	boxrisultato.pack_start(documento, false, false, 5)
+#	documento = Gtk::Entry.new
+#	documento.width_chars=(21)
+#	documento.editable = false
+#	boxrisultato.pack_start(documento, false, false, 5)
 	
 	labeltotcapi = Gtk::Label.new("Totale capi:")
 	boxrisultato.pack_start(labeltotcapi, false, false, 5)
@@ -172,7 +173,7 @@ def modpartitauscita
 		if @arridcapi.length == 0
 			Errore.avviso(modpartusc, "Devi selezionare un documento.")
 		else
-			viscapi = Gtk::Window.new("Capi del documento #{documento.text}")
+			viscapi = Gtk::Window.new("Capi del documento #{@documento}")
 			viscapi.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 			viscapi.set_default_size(400, 400)
 			viscapiscroll = Gtk::ScrolledWindow.new #(hadjustment = nil, vadjustment = nil)
@@ -479,7 +480,7 @@ def modpartitauscita
 					#puts selcapi.length
 					@datauscingl = selcapi[0].uscita
 					#puts @dataingringl
-					documento.text = arrdoc[0]
+					@documento = arrdoc[0]
 		#			#nascita.text = selmov[0].data_nas.strftime("%d/%m/%Y")
 					#	if capomod[31].to_s != ""
 					#puts selcapi[31]
@@ -540,6 +541,7 @@ def modpartitauscita
 					#movingr.text = selcapi[0].cm_usc.to_s
 					#dataingr.text = selcapi[0].uscita.strftime("%d/%m/%Y")
 					#nazprov.text = selcapi[0].naz_dest
+					labeldocumento.text = "Documento: #{arrdoc[0]}"
 					labeltotcapi.text = ("Capi della partita: #{selcapi.length}")
 
 
@@ -547,7 +549,8 @@ def modpartitauscita
 					#puts "Più di uno o zero"
 					#visunipeg(selmov, nazorig, naznas, movingr, dataingr, nazprov)
 					#puts arr.uniq.inspect
-					visdocumuscita(arrdoc.uniq, tipodocumento, documento, combonazdest, comboalldest, combomacdest, combomovusc, datausc, certsan, datacertsan, mod4, datamod4, labeltotcapi)
+					require 'visdocumuscita'
+					visdocumuscita(arrdoc.uniq, tipodocumento, labeldocumento, combonazdest, comboalldest, combomacdest, combomovusc, datausc, certsan, datacertsan, mod4, datamod4, labeltotcapi)
 #					puts "arridcapi:"
 #					@arridcapi.each do |s|
 #						puts s
@@ -619,6 +622,7 @@ def modpartitauscita
 #				begin
 #					puts @datauscingl
 #					puts s[1]
+					#puts nazdest
 					capomodreg = Registros.find(:first, :conditions => "relaz_id='#{@stallaoper.id}' and marca='#{s[1]}' and datauscita='#{@datauscingl}'")
 					if capomodreg == nil
 						Errore.avviso(modpartingr, "Attenzione: c'è un problema coi dati sul registro. Controllare a mano.")
@@ -636,6 +640,8 @@ def modpartitauscita
 							regdest = ""
 						elsif combomovusc.active_iter[0] == 9
 							regdest = combomacdest.active_iter[3]
+						elsif combomovusc.active_iter[0] == 16
+							regdest = nazdest
 						else
 							regdest = comboalldest.active_iter[3]
 						end
@@ -652,7 +658,7 @@ def modpartitauscita
 			end
 			Conferma.conferma(modpartusc, "Movimento modificato.")
 			@arridcapi = []
-			documento.text = ""
+			labeldocumento.text = "Documento:"
 			@datauscingl = ""
 			labeltotcapi.text = ("Capi della partita:")
 			combomovusc.active = -1

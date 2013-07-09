@@ -1,6 +1,6 @@
 # Inserimento prima importazione
 
-def mascprimimp(finestraingr, labelingr)
+def ingrprimaimp(finestraingr, labelingr)
 
 	mprimimp = Gtk::Window.new("Prima importazione")
 	mprimimp.window_position=(Gtk::Window::POS_CENTER_ALWAYS)

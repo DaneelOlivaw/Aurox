@@ -37,7 +37,7 @@ def codbarreita(finestraingr)
 #			@nascita.text = "#{altranascita}"
 #			mcodbarreita.destroy
 #			finestraingr.present
-			puts marca.inspect
+			#puts marca.inspect
 		end
 	}
 	entrycod2.signal_connect("activate") {
@@ -46,11 +46,11 @@ def codbarreita(finestraingr)
 		else
 			dati = entrycod2.text
 			razza = Razzas.find(:first, :conditions => ["cod_razza= ?", "#{dati[0,3]}"])
-			puts razza.inspect
+			#puts razza.inspect
 			sesso = dati[3,1]
-			puts sesso.inspect
+			#puts sesso.inspect
 			datanascita = dati[4,4] + dati[10,2]
-			puts datanascita.inspect
+			#puts datanascita.inspect
 #			altranascita = entrycod.text[17,6]
 			@marca.text = "#{marca}"
 			@razza.text = "#{razza.razza}" if razza != nil

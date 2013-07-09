@@ -105,6 +105,7 @@ def mascprimimp2(mcontaingr2, totcapi, tipomovimento)
 #		end
 #	}
 	errorenaz = 0
+=begin
 	nazprov.signal_connect("focus_out_event") {
 		#puts "FUORI!"
 		if controllonp.has_key?("#{nazprov.text.upcase}")
@@ -126,8 +127,17 @@ def mascprimimp2(mcontaingr2, totcapi, tipomovimento)
 			Errore.avviso(mprimimp, "La nazione non è classificata.")
 		end
 	}
+=end
 
 	certsan.signal_connect("changed") {
+		if controllonp.has_key?("#{nazprov.text.upcase}")
+			errorenaz = 0
+		else
+			#puts "male"
+			errorenaz = 1
+			#Errore.avviso(mprimimp, "La nazione non è classificata.")
+		end
+		#puts errorenaz
 		if errorenaz == 0 and nazprov.text != ""
 			if controllonp["#{nazprov.text.upcase}"][2] == 1
 				annoing = @giorno.strftime("%Y")[0,2] + dataing.text[4,2]
@@ -140,10 +150,10 @@ def mascprimimp2(mcontaingr2, totcapi, tipomovimento)
 			Errore.avviso(mprimimp, "C'è un problema con la nazione, non si può proseguire.")
 		end
 	}
-	
-	
-	
-	
+
+
+
+
 	#Numero riferimento locale
 
 	labelrifloc = Gtk::Label.new("Numero riferimento locale:")

@@ -229,11 +229,16 @@ def stampareggenerico(ordine, datainizio, datafine, orientamento)
 			#data << {"prog" => i["prog"], "marca" => i["marca"], "razza" => i["razza}", "sesso" => "#{i.sesso}", "madre" => "#{i.madre}",	"nc" => "#{i.tipoingresso}", "nascita" => "#{i.datanascita}", "ingresso" => "#{i.dataingresso}", "prov" => "#{i.provenienza}"}
 			data << {"prog" => i["prog"], "marca" => i["marca"], "razza" => i["razza"], "sesso" => i["sesso"], "madre" => i["madre"],	"nc" => i["tipoingresso"], "nascita" => i["datanascita"], "ingresso" => i["dataingresso"], "prov" => i["provenienza"]}
 		else
+			#puts i["marca"]
 			if i["tipouscita"] == "V" or i["tipouscita"] == "C"
-				mod4 = i["mod4usc"].split("/")
-				mod4anno = mod4[1]
-				mod4num = mod4[2]
-				mod4pul = mod4num + "/" + mod4anno.to_s[2,2]
+				unless i["mod4usc"].to_s == ""
+					mod4 = i["mod4usc"].split("/")
+					mod4anno = mod4[1]
+					mod4num = mod4[2]
+					mod4pul = mod4num + "/" + mod4anno.to_s[2,2]
+				else
+					mod4pul = "..." + i["certsanusc"].split(".")[3]
+				end
 			else
 				mod4pul = i["certsanusc"]
 			end

@@ -1,6 +1,6 @@
 # Inserimento dei dati di uscita dei capi
 
-def datiuscita(finestra, muscite, listasel, combousc)
+def uscgenerica(finestra, muscite, listasel, combousc, modo)
 	mdatiuscita = Gtk::Window.new("Compravendita o altro")
 	mdatiuscita.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxuscv = Gtk::VBox.new(false, 0)
@@ -25,7 +25,7 @@ def datiuscita(finestra, muscite, listasel, combousc)
 	boxuscv.pack_start(boxusc9, false, false, 5)
 	boxuscv.pack_start(boxusc10, false, false, 5)
 	mdatiuscita.add(boxuscv)
-
+	stringacapi = ""
 	#Data uscita
 
 	labeldatausc = Gtk::Label.new("Data uscita (GGMMAA):")
@@ -38,7 +38,7 @@ def datiuscita(finestra, muscite, listasel, combousc)
 
 	labelallevdest = Gtk::Label.new("Codice allevamento / mercato di destinazione:")
 	boxusc3.pack_start(labelallevdest, false, false, 5)
-	listall = Gtk::ListStore.new(Integer, String, String, String)
+	listall = Gtk::ListStore.new(Integer, String, String, String, String, String, String)
 	selalldest = Allevamentis.find(:all, :order => "ragsoc")
 	selalldest.each do |alldest|
 		iteralldest = listall.append
@@ -46,6 +46,9 @@ def datiuscita(finestra, muscite, listasel, combousc)
 		iteralldest[1] = alldest.ragsoc
 		iteralldest[2] = alldest.idfisc
 		iteralldest[3] = alldest.cod317
+		iteralldest[4] = alldest.via
+		iteralldest[5] = alldest.comune
+		iteralldest[6] = alldest.provincia
 	end
 	comboalldest = Gtk::ComboBox.new(listall)
 	renderusc = Gtk::CellRendererText.new
@@ -126,7 +129,10 @@ def datiuscita(finestra, muscite, listasel, combousc)
 	#Inserimento nuovo trasportatore
 
 	ntrasp = Gtk::Button.new("Nuovo trasportatore")
-	ntrasp.signal_connect( "released" ) { instrasportatori(listatrasp) }
+	ntrasp.signal_connect( "released" ) {
+		require "nuovotrasportatore"
+		nuovotrasportatore(listatrasp)
+	}
 	boxusc6.pack_start(ntrasp, false, false, 5)
 
 
@@ -174,6 +180,36 @@ def datiuscita(finestra, muscite, listasel, combousc)
 		mod4usc.text = ("#{nmod4}")
 		end
 	}
+
+	unless @mod4provv == ""
+		#puts "id mod4provv"
+		#puts @mod4provv[10]
+		datausc.text = @mod4provv[4].strftime("%d%m%y")
+		
+
+		unless @mod4provv[5].to_i == 0
+			comboalldest.set_active(0)
+			combotrasp.set_active(0)
+			z = -1
+			while comboalldest.active_iter[0] != @mod4provv[5].to_i
+				z+=1
+				comboalldest.set_active(z)
+			end
+		end
+		z = -1
+		while combotrasp.active_iter[1] != @mod4provv[9]
+			z+=1
+			combotrasp.set_active(z)
+		end
+		mod4usc.text = @mod4provv[0].split("/")[2]
+	end
+
+
+
+
+
+
+
 
 	#Bottone di inserimento uscite
 
@@ -247,42 +283,76 @@ def datiuscita(finestra, muscite, listasel, combousc)
 		end
 		listasel.each do |model,path,iter|
 			marcauscid = iter[0]
-			marcausc = iter[2]
-			specieusc = iter[3]
-			razzausc = iter[4]
-			nascitausc = iter[5]
-			cod317nasusc = iter[6]
-			sessousc = iter[7]
-			nazorigusc = iter[8]
-			nazprimimpusc = iter[9]
-			datamarcausc = iter[10]
-			ilgusc = iter[11]
-			marcaprecedenteusc = iter[12]
-			madreusc = iter[13]
-			padreusc = iter[14]
-			Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "U", :cm_usc => "#{combousc.active_iter[0]}", :marca => "#{marcausc}", :specie => "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :uscita => "#{datauscingl}", :allevamenti_id => "#{idalldest}", :naz_dest => "#{valcombonazdest}", :trasp => "#{valcombotrasp}", :mod4 => "#{mod4}", :data_mod4 => "#{datamod4uscingl.to_i}", :marcasost => "#{marcasost.text}", :idcoll => "#{marcauscid}")
-			usc = Animals.find(:first, :conditions => ["idcoll = ?", "#{marcauscid}"])
-			Animals.update(marcauscid, { :uscito => "1", :idcoll => "#{usc.id}"})
-		end
-		Relazs.update(@stallaoper.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
-		@stallaoper.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
-		Conferma.conferma(mdatiuscita, "Capi usciti correttamente.")
-		if alldir.length > 0
-			#puts "Trasf. diretto"
-			avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "L'allevamento di destinazione è tra le stalle gestite; procedo con il caricamento automatico?")
-			risposta = avviso.run
-			avviso.destroy
-			if risposta == Gtk::Dialog::RESPONSE_YES
-				#puts "Sì"
-				insautomatico(finestra, listasel, valcomboalldest, alldest317, alldir, combousc.active_iter[0], datausc.text, mod4, datamod4usc.text)
+			if modo == 0
+				marcausc = iter[2]
+				specieusc = iter[3]
+				razzausc = iter[4]
+				nascitausc = iter[5]
+				cod317nasusc = iter[6]
+				sessousc = iter[7]
+				nazorigusc = iter[8]
+				nazprimimpusc = iter[9]
+				datamarcausc = iter[10]
+				ilgusc = iter[11]
+				marcaprecedenteusc = iter[12]
+				madreusc = iter[13]
+				padreusc = iter[14]
+				Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "U", :cm_usc => "#{combousc.active_iter[0]}", :marca => "#{marcausc}", :specie => "#{specieusc}", :razza_id => "#{razzausc}", :data_nas => "#{nascitausc}", :stalla_nas => "#{cod317nasusc}", :sesso => "#{sessousc}", :naz_orig => "#{nazorigusc}", :naz_nasprimimp => "#{nazprimimpusc}", :data_applm => "#{datamarcausc}", :ilg => "#{ilgusc}", :marca_prec => "#{marcaprecedenteusc}", :marca_madre => "#{madreusc}", :marca_padre => "#{padreusc}", :uscita => "#{datauscingl}", :allevamenti_id => "#{idalldest}", :naz_dest => "#{valcombonazdest}", :trasp => "#{valcombotrasp}", :mod4 => "#{mod4}", :data_mod4 => "#{datamod4uscingl.to_i}", :marcasost => "#{marcasost.text}", :idcoll => "#{marcauscid}")
+				usc = Animals.find(:first, :conditions => ["idcoll = ?", "#{marcauscid}"])
+				Animals.update(marcauscid, { :uscito => "1", :idcoll => "#{usc.id}"})
 			else
-				Conferma.conferma(finestra, "Operazione annullata.")
+				stringacapi << "#{marcauscid}" +","
 			end
 		end
-		mdatiuscita.destroy
-		muscite.destroy
-		#finestra.present
+		if modo == 0
+			Relazs.update(@stallaoper.id, { :mod4usc => "#{mod4usc.text}/#{Time.parse("#{datamod4uscingl}").strftime("%y")}"})
+			@stallaoper.mod4usc = mod4usc.text + "/" + Time.parse("#{datamod4uscingl}").strftime("%y")
+			Mod4temps.delete(@mod4provv[10]) unless @mod4provv == ""
+			ActiveRecord::Base.connection.execute('alter table mod4temps auto_increment=1')
+			@mod4provv == ""
+			Conferma.conferma(mdatiuscita, "Capi usciti correttamente.")
+			if alldir.length > 0
+				#puts "Trasf. diretto"
+				avviso = Gtk::MessageDialog.new(finestra, Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, Gtk::MessageDialog::BUTTONS_YES_NO, "L'allevamento di destinazione è tra le stalle gestite; procedo con il caricamento automatico?")
+				risposta = avviso.run
+				avviso.destroy
+				if risposta == Gtk::Dialog::RESPONSE_YES
+					#puts "Sì"
+					require 'insautomatico'
+					insautomatico(finestra, listasel, valcomboalldest, alldest317, alldir, combousc.active_iter[0], datausc.text, mod4, datamod4usc.text)
+				else
+					Conferma.conferma(finestra, "Operazione annullata.")
+				end
+			end
+			mdatiuscita.destroy
+			muscite.destroy
 		else
+#			errore = 0
+#			if comboalldest.active_iter[4].to_s == "" or comboalldest.active_iter[5].to_s == "" or comboalldest.active_iter[6].to_s == ""
+#				Errore.avviso(finestra, "Manca l'indirizzo dell'allevamento, inseriscilo.")
+#				modallevamenti(comboalldest.active_iter[0])
+#				errore = 1
+#			end
+#			if errore == 0
+				if @mod4provv == ""
+					Mod4temps.create(:relaz_id => "#{@stallaoper.id.to_i}", :mod4 => "#{@stallaoper.stalle.cod317}/#{Time.parse("#{datamod4uscingl}").strftime("%Y")}/#{mod4usc.text}", :capi => "#{stringacapi.chop}", :datamod4 => "#{datamod4uscingl.to_i}", :datausc => "#{datauscingl}", :allevamenti_id => "#{idalldest}",:uscite_id => "#{combousc.active_iter[0]}", :naz_dest => "#{valcombonazdest}", :trasportatore => "#{valcombotrasp}")
+				else
+					Mod4temps.update(@mod4provv[10], {:mod4 => "#{@stallaoper.stalle.cod317}/#{Time.parse("#{datamod4uscingl}").strftime("%Y")}/#{mod4usc.text}", :capi => "#{stringacapi.chop}", :datamod4 => "#{datamod4uscingl.to_i}", :datausc => "#{datauscingl}", :allevamenti_id => "#{idalldest}",:uscite_id => "#{combousc.active_iter[0]}", :naz_dest => "#{valcombonazdest}", :trasportatore => "#{valcombotrasp}"})
+				end
+				Conferma.conferma(mdatiuscita, "Modello 4 provvisorio creato, ora puoi stamparlo.")
+				arrmarche = []
+				listasel.each do |model,path,iter|
+					arrmarche << iter[2]
+				end
+				require 'stampamod4provv'
+				stampamod4provv(mdatiuscita, arrmarche, combousc.active_iter, nil, comboalldest.active_iter, combotrasp.active_iter, @stallaoper.stalle.cod317 + "/" + Time.parse("#{datamod4uscingl}").strftime("%Y") + "/" + mod4usc.text, Time.parse("#{datauscingl}").strftime("%d/%m/%Y"))
+				mdatiuscita.destroy
+				muscite.destroy
+			#end
+		end
+		#mdatiuscita.destroy
+		#muscite.destroy
+		#finestra.present
 	end
 	}
 	boxusc10.pack_start(bottmovusc, false, false, 0)

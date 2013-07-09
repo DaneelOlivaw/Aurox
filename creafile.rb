@@ -332,10 +332,10 @@ def creafile(finestra)
 			targatraspfile = "".ljust(itercampi[38])
 
 			#creazione mod. 4
-			if itermov[34] != 4
-				mod4file = "#{itermov[26]}".ljust(itercampi[39])
-			else
+			if itermov[34] == 4 or itermov[34] == 16
 				mod4file = itermov[52].ljust(itercampi[39])
+			else
+				mod4file = "#{itermov[26]}".ljust(itercampi[39])
 			end
 
 			#creazione marca sostitutiva

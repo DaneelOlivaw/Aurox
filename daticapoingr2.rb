@@ -1,6 +1,6 @@
 def inscapo2(containgressi, depositoingr)
-	puts depositoingr.inspect
-	puts depositoingr["tipomovimento"].class
+	#puts depositoingr.inspect
+	#puts depositoingr["tipomovimento"].class
 	finestraingr2 = Gtk::Window.new("Dati del capo")
 	finestraingr2.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxingrvert = Gtk::VBox.new(false, 0)
@@ -30,7 +30,8 @@ def inscapo2(containgressi, depositoingr)
 		boxingr1.pack_start(bottaltricod, true, false, 0)
 
 		bottaltricod.signal_connect("clicked") {
-			insaltricod(finestraingr2)
+			require 'codbarrefr'
+			codbarrefr(finestraingr2)
 		}
 	end
 	bottaltricod = Gtk::Button.new("Codice a barre italiano")
@@ -56,12 +57,12 @@ def inscapo2(containgressi, depositoingr)
 
 	labelmarca = Gtk::Label.new("Marca:")
 	boxingr2.pack_start(labelmarca, false, false, 5)
-	marca = Gtk::Entry.new()
-	marca.max_length=(14)
-	boxingr2.pack_start(marca, false, false, 5)
+	@marca = Gtk::Entry.new()
+	@marca.max_length=(14)
+	boxingr2.pack_start(@marca, false, false, 5)
 	i = 0
-	marca.signal_connect("changed") {
-	if @arraypres.include?(marca.text.upcase) == true
+	@marca.signal_connect("changed") {
+	if @arraypres.include?(@marca.text.upcase) == true
 		Errore.avviso(finestraingr2, "La marca è già presente.")
 		errore = 2
 	else
@@ -143,9 +144,9 @@ def inscapo2(containgressi, depositoingr)
 
 	labelnascita = Gtk::Label.new("Data di nascita (GGMMAA):")
 	boxingr4.pack_start(labelnascita, false, false, 5)
-	nascita = Gtk::Entry.new
-	nascita.max_length=(6)
-	boxingr4.pack_start(nascita, false , false, 0)
+	@nascita = Gtk::Entry.new
+	@nascita.max_length=(6)
+	boxingr4.pack_start(@nascita, false , false, 0)
 
 	#Inserimento stalla di nascita / prima importazione
 
@@ -370,9 +371,9 @@ def inscapo2(containgressi, depositoingr)
 #	bottmoving = Gtk::Button.new("Dati ingresso")
 
 	if depositoingr["tipomovimento"].to_i == 1
-		puts "Nascita"
+		#puts "Nascita"
 		stallanas.text = "#{@stallaoper.stalle.cod317.to_s}"
-		nascita.text = depositoingr["dataingr"]
+		@nascita.text = depositoingr["dataingr"]
 		@combonazorig.set_active(0)
 		@combonaznas.set_active(0)
 		contanaz = -1
@@ -382,7 +383,7 @@ def inscapo2(containgressi, depositoingr)
 			@combonaznas.set_active(contanaz)
 		end
 	elsif depositoingr["tipomovimento"].to_i == 13 or depositoingr["tipomovimento"].to_i == 32
-		puts "Prima importazione"
+		#puts "Prima importazione"
 		stallanas.text = "#{@stallaoper.stalle.cod317.to_s}"
 #		labelspecie.hide
 #		specie1.hide
@@ -442,7 +443,7 @@ def inscapo2(containgressi, depositoingr)
 			end
 		end
 	else
-		puts "altro"
+		#puts "altro"
 		@combonazorig.set_active(0)
 		@combonaznas.set_active(0)
 		contanaz = -1
@@ -535,9 +536,9 @@ def inscapo2(containgressi, depositoingr)
 #	puts @comboing.active_iter[1]
 	begin
 #	puts Time.parse("#{nascita.text[4,2] + nascita.text[2,2] + nascita.text[0,2]}")
-	if nascita.text != nil
+	if @nascita.text != nil
 		#@datanasingl = @giorno.strftime("%Y")[0,2] + nascita.text[4,2] + nascita.text[2,2] + nascita.text[0,2]
-		@datanasingl = nascita.text[4,2] + nascita.text[2,2] + nascita.text[0,2]
+		@datanasingl = @nascita.text[4,2] + @nascita.text[2,2] + @nascita.text[0,2]
 		@datanasingl = Time.parse("#{@datanasingl}").strftime("%Y")[0,2] + @datanasingl
 	end
 	if errore != 2
@@ -564,16 +565,16 @@ def inscapo2(containgressi, depositoingr)
 	#@nnaz = @combonaznas.active
 	#if @comboing.active_iter[0] == 
 	#if marca.text == nil or @comborazze.active == -1 or nascita.text == nil or @combonazorig.active == -1 or @combonaznas.active == -1 or @comboing.active == -1
-	puts depositoingr["dataingringl"]
-	if marca.text == "" or razzaid == 0 or nascita.text == "" or @combonazorig.active == -1 or @combonaznas.active == -1 or @madre.text == ""
+	#puts depositoingr["dataingringl"]
+	if @marca.text == "" or razzaid == 0 or @nascita.text == "" or @combonazorig.active == -1 or @combonaznas.active == -1 or @madre.text == ""
 		Errore.avviso(finestraingr2, "Mancano dei dati obbligatori.")
 		errore = 1
 		#puts "dati obbligatori"
-	elsif marca.text[0,2].upcase == "IT" and marca.text.length < 14
+	elsif @marca.text[0,2].upcase == "IT" and @marca.text.length < 14
 		Errore.avviso(finestraingr2, "Marca corta.")
 		#puts "marca corta"
 		errore = 1
-	elsif nascita.text.to_i == 0 or nascita.text.length < 6
+	elsif @nascita.text.to_i == 0 or @nascita.text.length < 6
 		Errore.avviso(finestraingr2, "Data di nascita errata.")
 		errore = 1
 		#puts "data nascita"
@@ -602,18 +603,18 @@ def inscapo2(containgressi, depositoingr)
 		@datamarcingl = ""
 	end
 	rescue Exception => errore
-		puts errore
+		#puts errore
 		Errore.avviso(finestraingr2, "Controllare le date")
 	end
 	#puts "e ora, che vale? #{errore}"
 	if errore == 0
 		#puts "avanti"
-		@arraypres << marca.text.upcase
+		@arraypres << @marca.text.upcase
 		#@depositoingr = Hash["marca" => marca.text.upcase, "specie" => valspecie, "razza" => @comborazze.active_iter[0], "datanascita" => nascita.text, "stallanascita" => stallanas.text.upcase, "sesso" => @valsesso, "nazorig" => @combonazorig.active_iter[0], "naznasprimimp" => @combonaznas.active_iter[0], "datamarca" => marcatura.text, "marcaprec" => @prec.text.upcase, "madre" => @madre.text.upcase, "padre" => @padre.text.upcase, "donatrice" => @don.text.upcase, "libgen" => @libgen.text.upcase, "iscrlibgen" => @valgen, "embryo" => @valembryo, "ingresso" => @comboing.active_iter[0]]
-		depositoingr["marca"] = marca.text.upcase
+		depositoingr["marca"] = @marca.text.upcase
 		depositoingr["specie"] = valspecie
 		depositoingr["razza"] = razzaid
-		depositoingr["datanascita"] = nascita.text
+		depositoingr["datanascita"] = @nascita.text
 		depositoingr["stallanascita"] = stallanas.text.upcase
 		depositoingr["sesso"] = @valsesso
 		depositoingr["nazorig"] = @combonazorig.active_iter[0]
@@ -629,14 +630,14 @@ def inscapo2(containgressi, depositoingr)
 		depositoingr["iscrlibgen"] = @valgen
 		depositoingr["embryo"] = @valembryo
 		@primocapo == 1
-		puts depositoingr.inspect
+		#puts depositoingr.inspect
 		Animals.create(:relaz_id => "#{@stallaoper.id.to_i}", :tipo => "I", :cm_ing => "#{depositoingr["tipomovimento"]}", :marca => "#{depositoingr["marca"]}", :specie=> "#{depositoingr["specie"]}", :razza_id => "#{depositoingr["razza"]}", :data_nas => "#{@datanasingl.to_i}", :stalla_nas => "#{depositoingr["stallanascita"]}", :sesso => "#{depositoingr["sesso"]}", :naz_orig => "#{depositoingr["nazorigcod"]}", :naz_nasprimimp => "#{depositoingr["naznasprimimpcod"]}", :data_applm => "#{@datamarcingl.to_i}", :ilg => "#{depositoingr["iscrlibgen"]}", :embryo => "#{depositoingr["embryo"]}", :marca_prec => "#{depositoingr["marcaprec"]}", :marca_madre => "#{depositoingr["madre"]}", :marca_padre => "#{depositoingr["padre"]}", :donatrice => "#{depositoingr["donatrice"]}", :clg => "#{depositoingr["libgen"]}", :data_ingr => "#{depositoingr["dataingringl"]}", :allevamenti_id => "#{depositoingr["idallprov"]}", :naz_prov => "#{depositoingr["nazprov"]}", :mod4 => "#{depositoingr["mod4"]}", :data_mod4 => "#{depositoingr["datamod4"]}", :certsan => "#{depositoingr["certsan"]}", :rifloc => "#{depositoingr["rifloc"]}")
-		unless depositoingr["tipomovimento"].to_i == 13 or depositoingr["tipomovimento"].to_i == 32 or depositoingr["tipomovimento"].to_i == 1
-			puts "ma entra qua?"
-			stallanas.text = ""
-		end
-		marca.text = ""
-		nascita.text = "" unless depositoingr["tipomovimento"].to_i == 1
+		#unless depositoingr["tipomovimento"].to_i == 13 or depositoingr["tipomovimento"].to_i == 32 or depositoingr["tipomovimento"].to_i == 1
+			#puts "ma entra qua?"
+			#stallanas.text = ""
+		#end
+		@marca.text = ""
+		@nascita.text = "" unless depositoingr["tipomovimento"].to_i == 1
 		@madre.text = ""
 		marcatura.text = "" unless depositoingr["tipomovimento"].to_i == 1
 		@padre.text = ""

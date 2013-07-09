@@ -1,4 +1,4 @@
-def reinvio
+def reinviocapi
 	mreinvio = Gtk::Window.new("Selezione dei movimenti da reinviare")
 	mreinvio.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 #	mreinvio.resizable=(false)

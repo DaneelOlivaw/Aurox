@@ -1,4 +1,4 @@
-def stampapres(finestra)
+def stampapresenti(finestra)
 	selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and tipouscita IS NULL", "#{@stallaoper.id}"], :order => ["dataingresso, id"])
 	#selcapi = Registros.find(:all, :conditions => ["relaz_id= ? and YEAR (dataingresso) > 2009 and YEAR(dataingresso)<= 2010 and tipouscita IS NULL", "#{@stallaoper.id}"], :order => ["dataingresso, id"])
 	foglio = PDF::Writer.new(:paper => "A4")

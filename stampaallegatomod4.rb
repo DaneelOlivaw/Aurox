@@ -1,4 +1,4 @@
-def mascallmod4
+def stampaallegatomod4
 	mallmod4 = Gtk::Window.new("Stampa Modello 4 e allegato")
 	mallmod4.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxallmod4v = Gtk::VBox.new(false, 0)
@@ -36,8 +36,8 @@ def mascallmod4
 		if capi.length == 0
 			Errore.avviso(mallmod4, "Questo modello 4 non esiste.") #.avvia
 		else
-			require 'stampamod4'
-			stampamod4(m4.text, comboanno.active_iter[0], mallmod4)
+			require 'modello4'
+			modello4(m4.text, comboanno.active_iter[0], mallmod4)
 		end
 	}
 
@@ -48,7 +48,8 @@ def mascallmod4
 		if capi.length == 0
 			Errore.avviso(mallmod4, "Questo modello 4 non esiste.") #.avvia
 		else
-			stampaallegato(m4, comboanno.active_iter[0], capi)
+			require 'allegatomod4'
+			allegatomod4(m4, comboanno.active_iter[0], capi)
 		end
 	}
 
@@ -60,7 +61,8 @@ def mascallmod4
 	mallmod4.show_all
 end
 
-def stampaallegato(m4, anno, capi)
+=begin
+def allegatomod4(m4, anno, capi)
 	foglio = PDF::Writer.new(:paper => "A4")
 	foglio.select_font("Courier")
 	foglio.open_object do |testa|
@@ -104,3 +106,4 @@ def stampaallegato(m4, anno, capi)
 	end
 
 end
+=end

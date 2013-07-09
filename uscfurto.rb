@@ -1,6 +1,6 @@
 # Uscita per furto
 
-def datifurto(finestra, muscite, listasel, combousc)
+def uscfurto(finestra, muscite, listasel, combousc)
 	mdatifurto = Gtk::Window.new("Furto")
 	mdatifurto.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
 	boxuscv = Gtk::VBox.new(false, 0)

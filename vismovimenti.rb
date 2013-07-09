@@ -323,9 +323,11 @@ def vismovimenti
 			Conferma.conferma(mvismov, "Attenzione: il capo si trova nel registro; le modifiche saranno apportate anche in quest'ultimo. Nel caso sia stato stampato sul vidimato, ricordarsi di modificarlo a mano previo accordo col funzionario preposto.")
 		end
 		if selcapo.selected[1] == "I" #and @selcapo.selected[45] == "NO"
-			modificacapo(selcapo)
+			require 'modificaingresso'
+			modificaingresso(selcapo)
 		elsif selcapo.selected[1] == "U" #and @selcapo.selected[45] == "NO"
-			modificacapousc(selcapo)
+			require 'modificauscita'
+			modificauscita(selcapo)
 		#else
 			#Avvisoprova.avviso(mvismov, "Il movimento è stato inserito nel registro, per cui non è più possibile modificarlo.")
 		end

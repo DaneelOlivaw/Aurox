@@ -92,7 +92,7 @@ def mascnascita2(mcontaingr2, totcapi, tipomovimento)
 			Errore.avviso(mnascita, "Controllare le date.")
 		end
 		if errore == 0
-			allprov = Allevamentis.find(:first, :conditions => "cod317 = '#{@stallaoper.stalle.cod317}'")
+			allprov = Allevamentis.find(:first, :conditions => "cod317 = '#{@stallaoper.stalle.cod317}' and ragsoc = '#{@stallaoper.ragsoc.ragsoc}'")
 			depositoingr["dataingr"] = dataing.text #.to_i
 			depositoingr["dataingringl"] = dataingingl
 			depositoingr["idallprov"] = allprov.id

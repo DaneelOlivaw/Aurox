@@ -1,6 +1,6 @@
 #Esporta database
 
-def mascesportadb
+def esportadatabase
 
 	mesportadb = Gtk::Window.new("Esportazione database")
 	mesportadb.window_position=(Gtk::Window::POS_CENTER_ALWAYS)
