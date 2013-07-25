@@ -358,7 +358,7 @@ Gtk.init
 			Errore.avviso(window, "Seleziona una stalla, una ragione sociale, un detentore ed un proprietario.")
 		else
 			require 'stampavidimati'
-			stampavidimati(window)
+			stampavidimati
 		end
 	}
 	bottcompilaregistro.signal_connect("clicked") {
